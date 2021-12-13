@@ -17,7 +17,7 @@ Réalise le lancement du Space Invader
 
 """
 #Importation de bibliothèques nécessaires
-from tkinter import Canvas, Tk, Frame, Button, Label
+from tkinter import Canvas, Tk, Frame, Button, Label, PhotoImage
 
 class SpaceInvader(Tk):
     def __init__(self):
@@ -31,7 +31,7 @@ class SpaceInvader(Tk):
         # Menu
         self.Menu = Frame(bg="black")
         
-        self.titre=Label(self.Menu, text="Sapce Invader",font=("Helvetica",80), fg="green",bg="black")
+        self.titre=Label(self.Menu, text="Space Invader",font=("Helvetica",80), fg="green",bg="black")
         self.titre.pack(side="top", expand="yes")
         
         self.Démarrer = Button(self.Menu, text="START",font=("Helvetica",30),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.startPartie)
@@ -45,20 +45,50 @@ class SpaceInvader(Tk):
 
     def startPartie(self):
         self.Menu.destroy()
+        
         self.FrameGame= Frame(bg="black")
         
         self.canvaGame=Canvas(self.FrameGame, bg= 'black',height=900,width=900,highlightcolor="white",highlightthickness=2,relief="flat",highlightbackground="green")
         self.canvaGame.pack(side="left")
         
-
+        self.FreamHeartContain= Frame(self.FrameGame,bg="black")
+        self.FreamHeartContain.pack()
         """"
-        self.side=Frame(self.FrameGame)
-        self.side.grid(column=1, row=0)
-        self.labelScore = Label(self.side, text="Score", fg="blue")
-        self.labelScore.pack()
-        self.labelVie = Label(self.side, text="X vies", fg="blue" )
-        self.labelVie.pack()
+        self.FreamHeartContain.columnconfigure(0,weight=1)
+        self.FreamHeartContain.columnconfigure(1,weight=1)
+        self.FreamHeartContain.columnconfigure(2,weight=1)
         """
+        self.heartimg=PhotoImage(file='images/heart.png')
+        
+        self.FreamHeart1= Frame(self.FreamHeartContain,bg="black")
+        self.FreamHeart1.pack()
+        self.FreamHeart2= Frame(self.FreamHeartContain,bg="black")
+        self.FreamHeart2.pack()
+        self.FreamHeart3= Frame(self.FreamHeartContain,bg="black")
+        self.FreamHeart3.pack()
+        
+        self.Heart1=Canvas(self.FreamHeart1,height=180,width=180,bg="black",highlightthickness=0)
+        self.Heart1.create_image(0,0,anchor='nw',image=self.heartimg)
+        self.Heart1.pack(side="left")
+        
+        self.Heart2=Canvas(self.FreamHeart2,height=180,width=180,bg="black",highlightthickness=0)
+        self.Heart2.create_image(0,0,anchor='nw',image=self.heartimg)
+        self.Heart2.pack(side="top")
+        
+        self.Heart3=Canvas(self.FreamHeart3,height=180,width=180,bg="black",highlightthickness=0)
+        self.Heart3.create_image(0,0,anchor='nw',image=self.heartimg)
+        self.Heart3.pack(side="right")
+        
+        
+        self.labelScore1 = Label(self.FrameGame, text="Score :", fg="green",bg="black",font=("Helvetica",50))
+        self.labelScore1.pack(anchor="ne")
+        
+        self.labelScore2 = Label(self.FrameGame, text=" ",font=("Helvetica",50),bg="black", fg="green")
+        self.labelScore2.pack(anchor="ne")
+
+        self.Quitter = Button(self.FrameGame, text="QUIT",font=("Helvetica",50),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.destroy)
+        self.Quitter.pack(anchor="se")
+        
         self.FrameGame.pack(fill="both",expand="yes")
         
         
