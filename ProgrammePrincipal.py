@@ -22,4 +22,5 @@ from ProgrammeSecondaire import SpaceInvader
 #Programme principal
 if __name__ == "__main__":
     Inv = SpaceInvader()
+    
     Inv.mainloop()
