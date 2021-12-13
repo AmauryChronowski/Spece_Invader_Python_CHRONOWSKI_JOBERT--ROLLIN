@@ -16,3 +16,9 @@ Réalise le lancement du Space Invader
 -------
 
 """
+#Importation de bibliothèques nécessaires
+from tkinter import Tk
+
+class SpaceInvader(Tk):
+    def __init__(self):
+        super().__init__()
