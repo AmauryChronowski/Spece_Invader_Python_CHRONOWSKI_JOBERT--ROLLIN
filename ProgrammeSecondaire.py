@@ -30,33 +30,36 @@ class SpaceInvader(Tk):
 
         # Menu
         self.Menu = Frame(bg="black")
+        
         self.titre=Label(self.Menu, text="Sapce Invader",font=("Helvetica",80), fg="green",bg="black")
         self.titre.pack(side="top", expand="yes")
+        
         self.Démarrer = Button(self.Menu, text="START",font=("Helvetica",30),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.startPartie)
         self.Démarrer.pack(side="top", expand="yes")
+        
         self.Quitter = Button(self.Menu, text="QUIT",font=("Helvetica",30),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.destroy)
         self.Quitter.pack(side="top", expand="yes")
+        
         self.Menu.pack(fill="both",expand="yes") 
         
 
     def startPartie(self):
         self.Menu.destroy()
-        self.FrameGame= Frame()
-        self.FrameGame.pack()
-        self.FrameGame.columnconfigure(0, weight)
+        self.FrameGame= Frame(bg="black")
         
-        
-        self.canvaGame=Canvas(self.FrameGame, bg= 'black')
-        self.canvaGame.grid(column=0, row=0)
+        self.canvaGame=Canvas(self.FrameGame, bg= 'black',height=900,width=900,highlightcolor="white",highlightthickness=2,relief="flat",highlightbackground="green")
+        self.canvaGame.pack(side="left")
         
 
-        
+        """"
         self.side=Frame(self.FrameGame)
         self.side.grid(column=1, row=0)
         self.labelScore = Label(self.side, text="Score", fg="blue")
         self.labelScore.pack()
         self.labelVie = Label(self.side, text="X vies", fg="blue" )
         self.labelVie.pack()
+        """
+        self.FrameGame.pack(fill="both",expand="yes")
         
         
 
