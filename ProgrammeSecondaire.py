@@ -18,6 +18,8 @@ Réalise le lancement du Space Invader
 """
 #Importation de bibliothèques nécessaires
 from tkinter import Canvas, Tk, Frame, Button, Label, PhotoImage
+from time import time
+
 
 class SpaceInvader(Tk):
     def __init__(self):
@@ -46,6 +48,8 @@ class SpaceInvader(Tk):
     def startPartie(self):
         self.Menu.destroy()
         
+        #self.clockStartTime=time.time()
+
         self.FrameGame= Frame(bg="black")
         
         self.canvaGame=Canvas(self.FrameGame, bg= 'black',height=900,width=900,highlightcolor="white",highlightthickness=2,relief="flat",highlightbackground="green")
@@ -90,11 +94,21 @@ class SpaceInvader(Tk):
         self.Quitter.pack(anchor="se")
         
         self.FrameGame.pack(fill="both",expand="yes")
-        
-        
+        mobs(self,150,150)
 
-        
-        
     
-        
+
+    """ 
+    def clock(self):
+        return time.time()-self.clockStartTime
+
+    """
+class mobs(SpaceInvader):
+    def __init__(self,SpaceInvader,x,y):
+
+        imageEnemis = PhotoImage(file="/fs03/share/users/gabin.jobert-rollin/home/Documents/python/TP4/Spece_Invader_Python_CHRONOWSKI_JOBERT--ROLLIN/enemis.gif")
+        item = SpaceInvader.canvaGame.create_image(x,y, image=imageEnemis)
+        SpaceInvader.canvaGame.pack() 
+        SpaceInvader.mainloop()
+    #def move(self):
         
