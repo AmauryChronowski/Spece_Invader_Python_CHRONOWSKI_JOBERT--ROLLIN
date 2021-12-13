@@ -43,16 +43,16 @@ class SpaceInvader(Tk):
         self.Menu.destroy()
         self.FrameGame= Frame()
         self.FrameGame.pack()
-        self.FrameGame.columnconfigure(0, weight)
+        
         
         
         self.canvaGame=Canvas(self.FrameGame, bg= 'black')
-        self.canvaGame.grid(column=0, row=0)
+        self.canvaGame.pack(side="left")
         
 
         
         self.side=Frame(self.FrameGame)
-        self.side.grid(column=1, row=0)
+        self.side.pack()
         self.labelScore = Label(self.side, text="Score", fg="blue")
         self.labelScore.pack()
         self.labelVie = Label(self.side, text="X vies", fg="blue" )
