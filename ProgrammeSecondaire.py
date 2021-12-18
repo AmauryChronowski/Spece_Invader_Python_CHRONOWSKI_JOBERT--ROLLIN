@@ -94,7 +94,7 @@ class SpaceInvader(Tk):
         self.Quitter.pack(anchor="se")
         
         self.FrameGame.pack(fill="both",expand="yes")
-        mobs(self,150,150)
+        joueur(self,150,150)
 
     
 
@@ -105,10 +105,41 @@ class SpaceInvader(Tk):
     """
 class mobs(SpaceInvader):
     def __init__(self,SpaceInvader,x,y):
-
-        imageEnemis = PhotoImage(file="/fs03/share/users/gabin.jobert-rollin/home/Documents/python/TP4/Spece_Invader_Python_CHRONOWSKI_JOBERT--ROLLIN/enemis.gif")
-        item = SpaceInvader.canvaGame.create_image(x,y, image=imageEnemis)
+        item = SpaceInvader.canvaGame.create_image(x,y, image=self.imageEnemis)
         SpaceInvader.canvaGame.pack() 
         SpaceInvader.mainloop()
-    #def move(self):
+    
+
+class enemis1(mobs):
+    def __init__(self, SpaceInvader, x, y):
+        self.imageEnemis = PhotoImage(file="images\enemi1.gif")
+        super().__init__(SpaceInvader,x,y)
+class enemis2(mobs):
+    def __init__(self, SpaceInvader, x, y):
+        self.imageEnemis = PhotoImage(file="images\enemi2.gif")
+        super().__init__(SpaceInvader,x,y)
+
+class enemis3(mobs):
+    def __init__(self, SpaceInvader, x, y):
+        self.imageEnemis = PhotoImage(file="images\enemi3.gif")
+        super().__init__(SpaceInvader,x,y)
+
+class joueur(mobs):
+    def __init__(self, SpaceInvader, x, y):
+        self.imageEnemis = PhotoImage(file="images\joueur.gif")
+        super().__init__(SpaceInvader,x,y)
+
+    def vaLeft(event):
+        print('left')
+        myLabel=Label(SpaceInvader.canvaGame,text="blablabla")
+        myLabel.pack() 
+
+    def vaRight(event):
+        print('right')
+
+    def move(self):
         
+        SpaceInvader.bind("<key>",self.vaRight)   
+        SpaceInvader.canvaGame.pack()
+        SpaceInvader.mainloop()
+    
