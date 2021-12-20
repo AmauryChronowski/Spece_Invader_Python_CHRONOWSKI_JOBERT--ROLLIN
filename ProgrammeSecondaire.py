@@ -17,6 +17,7 @@ Réalise le lancement du Space Invader
 
 """
 #Importation de bibliothèques nécessaires
+from os import spawnl
 from tkinter import Canvas, Tk, Frame, Button, Label, PhotoImage
 from time import time
 
@@ -125,20 +126,36 @@ class enemis3(mobs):
         super().__init__(SpaceInvader,x,y)
 
 class joueur(mobs):
+    
+        
+
+    def vaUp(self, event):
+        print('UP')
+        self.fenetre.move(self.imageEnemis,0,20)
+
+    def vaDown(self, SpaceInvader, event):
+        print('DOWN')
+        SpaceInvader.canvaGame.move(self.imageEnemis,0,-20)
+    def vaRight(self, SpaceInvader, event):
+        print('RIGHT')
+        SpaceInvader.canvaGame.move(self.imageEnemis,20,0)
+
+    def vaLeft(self, SpaceInvader, event):
+        print('LEFT')
+        SpaceInvader.canvaGame.move(self.imageEnemis,-20,0)
+
     def __init__(self, SpaceInvader, x, y):
+        self.fenetre=SpaceInvader.canvaGame
+        SpaceInvader.bind("z",self.vaUp)
+        SpaceInvader.bind("q",self.vaLeft)   
+        SpaceInvader.bind("s",self.vaDown)   
+        SpaceInvader.bind("d",self.vaRight)      
         self.imageEnemis = PhotoImage(file="images\joueur.gif")
         super().__init__(SpaceInvader,x,y)
 
-    def vaLeft(event):
-        print('left')
-        myLabel=Label(SpaceInvader.canvaGame,text="blablabla")
-        myLabel.pack() 
-
-    def vaRight(event):
-        print('right')
+    
 
     def move(self):
-        
         SpaceInvader.bind("<key>",self.vaRight)   
         SpaceInvader.canvaGame.pack()
         SpaceInvader.mainloop()
