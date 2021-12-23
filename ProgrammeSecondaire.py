@@ -44,7 +44,11 @@ class SpaceInvader(Tk):
         self.Quitter.pack(side="top", expand="yes")
         
         self.Menu.pack(fill="both",expand="yes") 
-        
+    def bindPlayer(self,Player):
+        SpaceInvader.bind("z",lambda b=SpaceInvader: Player.vaUp(b))
+        self.bind("q",Player.vaLeft)   
+        SpaceInvader.bind("s",Player.vaDown)   
+        self.bind("d",Player.vaRight)   
 
     def startPartie(self):
         self.Menu.destroy()
@@ -95,8 +99,8 @@ class SpaceInvader(Tk):
         self.Quitter.pack(anchor="se")
         
         self.FrameGame.pack(fill="both",expand="yes")
-        joueur(self,150,150)
-
+        player=joueur(self.canvaGame,150,150)
+        self.bindPlayer(player)
     
 
     """ 
@@ -104,59 +108,56 @@ class SpaceInvader(Tk):
         return time.time()-self.clockStartTime
 
     """
-class mobs(SpaceInvader):
-    def __init__(self,SpaceInvader,x,y):
-        item = SpaceInvader.canvaGame.create_image(x,y, image=self.imageEnemis)
-        SpaceInvader.canvaGame.pack() 
-        SpaceInvader.mainloop()
+class mobs():
+    def __init__(self,canva,x,y):
+        self.canva=canva
+        item = canva.create_image(x,y, image=self.imageEnemis)
+        canva.pack() 
+        canva.mainloop()
     
 
 class enemis1(mobs):
-    def __init__(self, SpaceInvader, x, y):
+    def __init__(self, canva, x, y):
         self.imageEnemis = PhotoImage(file="images\enemi1.gif")
-        super().__init__(SpaceInvader,x,y)
+        super().__init__(canva,x,y)
 class enemis2(mobs):
-    def __init__(self, SpaceInvader, x, y):
+    def __init__(self, canva, x, y):
         self.imageEnemis = PhotoImage(file="images\enemi2.gif")
-        super().__init__(SpaceInvader,x,y)
+        super().__init__(canva,x,y)
 
 class enemis3(mobs):
-    def __init__(self, SpaceInvader, x, y):
+    def __init__(self, canva, x, y):
         self.imageEnemis = PhotoImage(file="images\enemi3.gif")
-        super().__init__(SpaceInvader,x,y)
+        super().__init__(canva,x,y)
 
 class joueur(mobs):
     
-        
-
-    def vaUp(self, event):
+    
+    def vaUp(self, SpaceInvader):
         print('UP')
-        self.fenetre.move(self.imageEnemis,0,20)
-
-    def vaDown(self, SpaceInvader, event):
+        
+    
+    def vaDown(self, event):
         print('DOWN')
+        
         SpaceInvader.canvaGame.move(self.imageEnemis,0,-20)
-    def vaRight(self, SpaceInvader, event):
+    def vaRight(self, event):
         print('RIGHT')
-        SpaceInvader.canvaGame.move(self.imageEnemis,20,0)
+        """ self.canva.move(self.imageEnemis,-20,0)
+        self.canva.pack() """
 
-    def vaLeft(self, SpaceInvader, event):
+    def vaLeft(self, event):
         print('LEFT')
-        SpaceInvader.canvaGame.move(self.imageEnemis,-20,0)
+        """ self.canva.move(self.imageEnemis,-20,0)
+        self.canva.pack() """
 
-    def __init__(self, SpaceInvader, x, y):
-        self.fenetre=SpaceInvader.canvaGame
-        SpaceInvader.bind("z",self.vaUp)
-        SpaceInvader.bind("q",self.vaLeft)   
-        SpaceInvader.bind("s",self.vaDown)   
-        SpaceInvader.bind("d",self.vaRight)      
+    def __init__(self, canva, x, y):
+        self.fenetre=SpaceInvader
+           
         self.imageEnemis = PhotoImage(file="images\joueur.gif")
-        super().__init__(SpaceInvader,x,y)
+        super().__init__(canva,x,y)
 
     
 
-    def move(self):
-        SpaceInvader.bind("<key>",self.vaRight)   
-        SpaceInvader.canvaGame.pack()
-        SpaceInvader.mainloop()
+    
     
