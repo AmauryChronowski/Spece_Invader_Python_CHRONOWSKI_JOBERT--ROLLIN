@@ -18,88 +18,89 @@ Réalise le lancement du Space Invader
 """
 #Importation de bibliothèques nécessaires
 from os import spawnl
-from tkinter import Canvas, Tk, Frame, Button, Label, PhotoImage
+import tkinter as tk
 from time import time
 
 
-class SpaceInvader(Tk):
-    def __init__(self):
-        super().__init__()
-        
+class SpaceInvader(tk.Frame):
+    def __init__(self,root):
+        super().__init__(root)
+        self.root=root
         # Fentêtre
-        self.title('Space Invader')
-        self.geometry('1600x900')
+        
         
 
         # Menu
-        self.Menu = Frame(bg="black")
+        self.Menu = tk.Frame(bg="black")
         
-        self.titre=Label(self.Menu, text="Space Invader",font=("Helvetica",80), fg="green",bg="black")
+        self.titre=tk.Label(self.Menu, text="Space Invader",font=("Helvetica",80), fg="green",bg="black")
         self.titre.pack(side="top", expand="yes")
         
-        self.Démarrer = Button(self.Menu, text="START",font=("Helvetica",30),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.startPartie)
+        self.Démarrer = tk.Button(self.Menu, text="START",font=("Helvetica",30),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.startPartie)
         self.Démarrer.pack(side="top", expand="yes")
         
-        self.Quitter = Button(self.Menu, text="QUIT",font=("Helvetica",30),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.destroy)
+        self.Quitter = tk.Button(self.Menu, text="QUIT",font=("Helvetica",30),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.destroy)
         self.Quitter.pack(side="top", expand="yes")
         
         self.Menu.pack(fill="both",expand="yes") 
-    def bindPlayer(self,Player):
-        SpaceInvader.bind("z",lambda b=SpaceInvader: Player.vaUp(b))
-        self.bind("q",Player.vaLeft)   
-        SpaceInvader.bind("s",Player.vaDown)   
-        self.bind("d",Player.vaRight)   
 
+    def bindPlayer(self,Player):
+        self.root.bind("z",lambda event, e=self.canvaGame: Player.vaUp(event, e))
+        self.root.bind("q",lambda event, e=self.canvaGame: Player.vaLeft(event, e))   
+        self.root.bind("s",lambda event, e=self.canvaGame: Player.vaDown(event, e))   
+        self.root.bind("d",lambda event, e=self.canvaGame: Player.vaRight(event, e))   
+            
     def startPartie(self):
         self.Menu.destroy()
         
         #self.clockStartTime=time.time()
 
-        self.FrameGame= Frame(bg="black")
+        self.FrameGame= tk.Frame(bg="black")
         
-        self.canvaGame=Canvas(self.FrameGame, bg= 'black',height=900,width=900,highlightcolor="white",highlightthickness=2,relief="flat",highlightbackground="green")
+        self.canvaGame=tk.Canvas(self.FrameGame, bg= 'black',height=900,width=900,highlightcolor="white",highlightthickness=2,relief="flat",highlightbackground="green")
         self.canvaGame.pack(side="left")
         
-        self.FreamHeartContain= Frame(self.FrameGame,bg="black")
+        self.FreamHeartContain= tk.Frame(self.FrameGame,bg="black")
         self.FreamHeartContain.pack()
         """"
         self.FreamHeartContain.columnconfigure(0,weight=1)
         self.FreamHeartContain.columnconfigure(1,weight=1)
         self.FreamHeartContain.columnconfigure(2,weight=1)
         """
-        self.heartimg=PhotoImage(file='images/heart.png')
+        self.heartimg=tk.PhotoImage(file='images/heart.png')
         
-        self.FreamHeart1= Frame(self.FreamHeartContain,bg="black")
+        self.FreamHeart1= tk.Frame(self.FreamHeartContain,bg="black")
         self.FreamHeart1.pack()
-        self.FreamHeart2= Frame(self.FreamHeartContain,bg="black")
+        self.FreamHeart2= tk.Frame(self.FreamHeartContain,bg="black")
         self.FreamHeart2.pack()
-        self.FreamHeart3= Frame(self.FreamHeartContain,bg="black")
+        self.FreamHeart3= tk.Frame(self.FreamHeartContain,bg="black")
         self.FreamHeart3.pack()
         
-        self.Heart1=Canvas(self.FreamHeart1,height=180,width=180,bg="black",highlightthickness=0)
+        self.Heart1=tk.Canvas(self.FreamHeart1,height=180,width=180,bg="black",highlightthickness=0)
         self.Heart1.create_image(0,0,anchor='nw',image=self.heartimg)
         self.Heart1.pack(side="left")
         
-        self.Heart2=Canvas(self.FreamHeart2,height=180,width=180,bg="black",highlightthickness=0)
+        self.Heart2=tk.Canvas(self.FreamHeart2,height=180,width=180,bg="black",highlightthickness=0)
         self.Heart2.create_image(0,0,anchor='nw',image=self.heartimg)
         self.Heart2.pack(side="top")
         
-        self.Heart3=Canvas(self.FreamHeart3,height=180,width=180,bg="black",highlightthickness=0)
+        self.Heart3=tk.Canvas(self.FreamHeart3,height=180,width=180,bg="black",highlightthickness=0)
         self.Heart3.create_image(0,0,anchor='nw',image=self.heartimg)
         self.Heart3.pack(side="right")
         
         
-        self.labelScore1 = Label(self.FrameGame, text="Score :", fg="green",bg="black",font=("Helvetica",50))
+        self.labelScore1 = tk.Label(self.FrameGame, text="Score :", fg="green",bg="black",font=("Helvetica",50))
         self.labelScore1.pack(anchor="ne")
         
-        self.labelScore2 = Label(self.FrameGame, text=" ",font=("Helvetica",50),bg="black", fg="green")
+        self.labelScore2 = tk.Label(self.FrameGame, text=" ",font=("Helvetica",50),bg="black", fg="green")
         self.labelScore2.pack(anchor="ne")
 
-        self.Quitter = Button(self.FrameGame, text="QUIT",font=("Helvetica",50),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.destroy)
+        self.Quitter = tk.Button(self.FrameGame, text="QUIT",font=("Helvetica",50),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.destroy)
         self.Quitter.pack(anchor="se")
         
         self.FrameGame.pack(fill="both",expand="yes")
-        player=joueur(self.canvaGame,150,150)
+
+        player=joueur(self,450,830)
         self.bindPlayer(player)
     
 
@@ -109,11 +110,12 @@ class SpaceInvader(Tk):
 
     """
 class mobs():
-    def __init__(self,canva,x,y):
-        self.canva=canva
-        item = canva.create_image(x,y, image=self.imageEnemis)
-        canva.pack() 
-        canva.mainloop()
+    def __init__(self,root,x,y):
+        self.canva=root.canvaGame
+        self.root=root
+        self.item = root.canvaGame.create_image(x,y, image=self.imageEnemis)
+        root.canvaGame.pack() 
+        
     
 
 class enemis1(mobs):
@@ -131,30 +133,25 @@ class enemis3(mobs):
         super().__init__(canva,x,y)
 
 class joueur(mobs):
-    
-    
-    def vaUp(self, SpaceInvader):
+
+    def vaUp(self, event, canva):
         print('UP')
-        
+        canva.move(self.item,0,-20)
     
-    def vaDown(self, event):
+    def vaDown(self, event, canva):
         print('DOWN')
-        
-        SpaceInvader.canvaGame.move(self.imageEnemis,0,-20)
-    def vaRight(self, event):
+        canva.move(self.item,0,20)
+
+    def vaRight(self, event, canva):
         print('RIGHT')
-        """ self.canva.move(self.imageEnemis,-20,0)
-        self.canva.pack() """
+        canva.move(self.item,20,0)
 
-    def vaLeft(self, event):
+    def vaLeft(self, event, canva):
         print('LEFT')
-        """ self.canva.move(self.imageEnemis,-20,0)
-        self.canva.pack() """
-
+        canva.move(self.item,-20,0)
+      
     def __init__(self, canva, x, y):
-        self.fenetre=SpaceInvader
-           
-        self.imageEnemis = PhotoImage(file="images\joueur.gif")
+        self.imageEnemis = tk.PhotoImage(file="images\joueur.gif")
         super().__init__(canva,x,y)
 
     
