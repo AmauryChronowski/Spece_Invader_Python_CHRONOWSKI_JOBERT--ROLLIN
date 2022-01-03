@@ -102,6 +102,20 @@ class SpaceInvader(tk.Frame):
         self.FrameGame.pack(fill="both",expand="yes")
 
         player=joueur(self,450,830)
+        """
+        for i in range(3):
+            x=60
+            y=60
+            if i==1:
+                enemi1=enemis1(self,x,y)
+                enemi2=enemis1(self,x,y)
+                enemi3=enemis1(self,x,y)
+                enemi4=enemis1(self,x,y)
+                enemi5=enemis1(self,x,y)
+                enemi6=enemis1(self,x,y)
+                enemi7=enemis1(self,x,y)
+                enemi8=enemis1(self,x,y)
+        """
         self.bindPlayer(player)
         #player.tir(self.canvaGame)
 
@@ -146,17 +160,20 @@ class joueur(mobs):
         canva.move(self.item,0,20)
     """
     def vaRight(self, event, canva):
-        x1,x2,y1,y2=self.joueur.coords
-        print(x1,x2)
         print('RIGHT')
-        canva.move(self.item,20,0)
-        self.x+=20
+        x1,y1,x2,y2=canva.bbox(self.item)
+        print(x1,x2,y1,y2)
+        if x2+10<900:
+            canva.move(self.item,10,0)
 
 
     def vaLeft(self, event, canva):
         print('LEFT')
-        canva.move(self.item,-20,0)
-        self.x-=20
+        x1,y1,x2,y2=canva.bbox(self.item)
+        print(x1,x2,y1,y2)
+        if x1-10>0:
+            canva.move(self.item,-10,0)
+            
     def tir(self, event,canva):
         #shot= canva.create_oval(self.x-10,self.y-20-self.imageHeight/2,self.x+10,self.y-self.imageHeight/2,fill='green')
         shot=tirShot(canva,self.x,self.y,self.imageHeight)
