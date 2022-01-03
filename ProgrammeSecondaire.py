@@ -4,17 +4,10 @@
 
 """
 Programme secondaire Sapce Invader
-
 Amaury CHRONOWSKI/Gabin JOBERT--ROLLIN
-
 15/11/2021
-
 Réalise le lancement du Space Invader
-
-
-
 -------
-
 """
 #Importation de bibliothèques nécessaires
 from os import spawnl
@@ -48,7 +41,8 @@ class SpaceInvader(tk.Frame):
         self.root.bind("z",lambda event, e=self.canvaGame: Player.vaUp(event, e))
         self.root.bind("q",lambda event, e=self.canvaGame: Player.vaLeft(event, e))   
         self.root.bind("s",lambda event, e=self.canvaGame: Player.vaDown(event, e))   
-        self.root.bind("d",lambda event, e=self.canvaGame: Player.vaRight(event, e))   
+        self.root.bind("d",lambda event, e=self.canvaGame: Player.vaRight(event, e)) 
+        self.root.bind("<space>",lambda event, e=self.canvaGame: Player.tir(event, e))     
             
     def startPartie(self):
         self.Menu.destroy()
@@ -101,13 +95,12 @@ class SpaceInvader(tk.Frame):
         self.FrameGame.pack(fill="both",expand="yes")
 
         player=joueur(self,450,830)
-        
+        """
         for i in range(3):
             x=60
             y=60
             if i==1:
                 enemi1=enemis1(self,x,y)
-                """
                 enemi2=enemis1(self,x,y)
                 enemi3=enemis1(self,x,y)
                 enemi4=enemis1(self,x,y)
@@ -115,15 +108,13 @@ class SpaceInvader(tk.Frame):
                 enemi6=enemis1(self,x,y)
                 enemi7=enemis1(self,x,y)
                 enemi8=enemis1(self,x,y)
-                """
-
+        """
         self.bindPlayer(player)
-        player.tir(self.canvaGame)
+        #player.tir(self.canvaGame)
 
     """ 
     def clock(self):
         return time.time()-self.clockStartTime
-
     """
 class mobs():
     def __init__(self,root,x,y):
@@ -167,16 +158,38 @@ class joueur(mobs):
         if x2+10<900:
             canva.move(self.item,10,0)
 
+
     def vaLeft(self, event, canva):
         print('LEFT')
         x1,y1,x2,y2=canva.bbox(self.item)
         print(x1,x2,y1,y2)
         if x1-10>0:
             canva.move(self.item,-10,0)
-
-    def tir(self, canva):
-        shot= canva.create_oval(self.x-10,self.y-20-self.imageHeight/2,self.x+10,self.y-self.imageHeight/2,fill='green')   
-
+            
+    def tir(self, event,canva):
+        #shot= canva.create_oval(self.x-10,self.y-20-self.imageHeight/2,self.x+10,self.y-self.imageHeight/2,fill='green')
+        shot=tirShot(canva,self.x,self.y,self.imageHeight)
+    #updateTir(self, shot)
+        
+        
     def __init__(self, canva, x, y):
-        self.imageEnemis = tk.PhotoImage(file="images/joueur.gif")
+        self.imageEnemis = tk.PhotoImage(file="images\joueur.gif")
+        self.imageHeight=84
+        self.imageWidth=110
+        self.shots=[]
         super().__init__(canva,x,y)
+
+    
+class tirShot():
+    def __init__(self,canva,x,y,imageHeight):
+        self.x=x
+        self.y=y
+        self.shot= canva.create_oval(x-10,y-20-imageHeight/2,x+10,y-imageHeight/2,fill='green')
+        self.update(canva)
+    
+    def update(self,canva):
+        
+        if self.y<=900 and self.y>=0:
+            self.y-=15
+            canva.move(self.shot,0,-15)
+            canva.after(16,lambda : self.update(canva))
