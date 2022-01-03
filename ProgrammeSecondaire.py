@@ -149,7 +149,8 @@ class joueur(mobs):
         x1,x2,y1,y2=self.joueur.coords
         print(x1,x2)
         print('RIGHT')
-        canva.move(self.item,10,0)
+        canva.move(self.item,20,0)
+        self.x+=20
 
 
     def vaLeft(self, event, canva):
@@ -166,6 +167,7 @@ class joueur(mobs):
         self.imageEnemis = tk.PhotoImage(file="images\joueur.gif")
         self.imageHeight=84
         self.imageWidth=110
+        self.shots=[]
         super().__init__(canva,x,y)
 
     
