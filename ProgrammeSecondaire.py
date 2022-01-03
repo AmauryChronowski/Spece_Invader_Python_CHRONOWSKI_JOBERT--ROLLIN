@@ -157,7 +157,7 @@ class joueur(mobs):
         print(x1,x2,y1,y2)
         if x2+10<900:
             canva.move(self.item,10,0)
-
+            self.x+=10
 
     def vaLeft(self, event, canva):
         print('LEFT')
@@ -165,6 +165,7 @@ class joueur(mobs):
         print(x1,x2,y1,y2)
         if x1-10>0:
             canva.move(self.item,-10,0)
+            self.x-=10
             
     def tir(self, event,canva):
         #shot= canva.create_oval(self.x-10,self.y-20-self.imageHeight/2,self.x+10,self.y-self.imageHeight/2,fill='green')
@@ -193,3 +194,5 @@ class tirShot():
             self.y-=15
             canva.move(self.shot,0,-15)
             canva.after(16,lambda : self.update(canva))
+        else:
+            self.shot.destroy
