@@ -122,16 +122,16 @@ class mobs():
 
 class enemis1(mobs):
     def __init__(self, canva, x, y):
-        self.imageEnemis = PhotoImage(file="images/enemi1.gif")
+        self.imageEnemis = tk.PhotoImage(file="images/enemi1.gif")
         super().__init__(canva,x,y)
 class enemis2(mobs):
     def __init__(self, canva, x, y):
-        self.imageEnemis = PhotoImage(file="images/enemi2.gif")
+        self.imageEnemis = tk.PhotoImage(file="images/enemi2.gif")
         super().__init__(canva,x,y)
 
 class enemis3(mobs):
     def __init__(self, canva, x, y):
-        self.imageEnemis = PhotoImage(file="images/enemi3.gif")
+        self.imageEnemis = tk.PhotoImage(file="images/enemi3.gif")
         super().__init__(canva,x,y)
 
 class joueur(mobs):
@@ -153,9 +153,10 @@ class joueur(mobs):
     def vaLeft(self, event, canva):
         print('LEFT')
         canva.move(self.item,-20,0)
-    def tir(self, canva):q
-        shot= canva.create_oval(self.x-10,self.y-20-self.imageHeight/2,self.x+10,self.y-self.imageHeight/2,fill='green')
-    #sfdsddssdwdef updateTir(self, shot)
+    def tir(self, canva):
+        #shot= canva.create_oval(self.x-10,self.y-20-self.imageHeight/2,self.x+10,self.y-self.imageHeight/2,fill='green')
+        shot=tirShot(canva,self.x,self.y,self.imageHeight)
+    #updateTir(self, shot)
         
         
     def __init__(self, canva, x, y):
@@ -165,6 +166,9 @@ class joueur(mobs):
         super().__init__(canva,x,y)
 
     
-
+class tirShot():
+    def __init__(self,canva,x,y,imageHeight):
+        shot= canva.create_oval(x-10,y-20-imageHeight/2,x+10,y-imageHeight/2,fill='green')
+    
     
     
