@@ -184,4 +184,5 @@ class tirShot():
             self.y-=15
             canva.move(self.shot,0,-15)
             canva.after(16,lambda : self.update(canva))
-        
+        else:
+            self.shot.destroy
