@@ -86,7 +86,7 @@ class SpaceInvader(tk.Frame):
         self.labelScore1 = tk.Label(self.FrameGame, text="Score : ", fg="green",bg="black",font=("Helvetica",50))
         self.labelScore1.pack(anchor="w")
         
-        self.labelScore2 = tk.Label(self.FrameGame, text=" ",font=("Helvetica",50),bg="black", fg="green")
+        self.labelScore2 = tk.Label(self.FrameGame, text="0",font=("Helvetica",50),bg="black", fg="green")
         self.labelScore2.pack(anchor="w")
 
         self.RejouerB = tk.Button(self.FrameGame, text="RESTART",font=("Helvetica",50),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.Rejouer)
@@ -101,20 +101,22 @@ class SpaceInvader(tk.Frame):
         self.bindPlayer(player)
         #player.tir(self.canvaGame)
 
-        x=60
-        y=60
-        enemei=enemis1(self,x,y)
+        enemei=enemis1(self,450,830)
 
-    
     def Rejouer(self):
         self.FrameGame.destroy()
         self.startPartie()
-
 
     """ 
     def clock(self):
         return time.time()-self.clockStartTime
     """
+
+class obstacle():
+    def __init__(self,root):
+        self.canva=root.canvaGame
+        self.root=root
+
 class mobs():
     def __init__(self,root,x,y):
         self.canva=root.canvaGame
@@ -151,17 +153,13 @@ class joueur(mobs):
         canva.move(self.item,0,20)
     """
     def vaRight(self, event, canva):
-        print('RIGHT')
         x1,y1,x2,y2=canva.bbox(self.item)
-        print(x1,x2,y1,y2)
         if x2+10<900:
             canva.move(self.item,10,0)
             self.x+=10
 
     def vaLeft(self, event, canva):
-        print('LEFT')
         x1,y1,x2,y2=canva.bbox(self.item)
-        print(x1,x2,y1,y2)
         if x1-10>0:
             canva.move(self.item,-10,0)
             self.x-=10
