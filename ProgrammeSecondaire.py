@@ -64,11 +64,11 @@ class SpaceInvader(tk.Frame):
         self.heartimg=tk.PhotoImage(file='images/heart.png')
         
         self.FreamHeart1= tk.Frame(self.FreamHeartContain,bg="black")
-        self.FreamHeart1.pack()
+        self.FreamHeart1.pack(side='left')
         self.FreamHeart2= tk.Frame(self.FreamHeartContain,bg="black")
-        self.FreamHeart2.pack()
+        self.FreamHeart2.pack(side='left')
         self.FreamHeart3= tk.Frame(self.FreamHeartContain,bg="black")
-        self.FreamHeart3.pack()
+        self.FreamHeart3.pack(side='right')
         
         self.Heart1=tk.Canvas(self.FreamHeart1,height=180,width=180,bg="black",highlightthickness=0)
         self.Heart1.create_image(0,0,anchor='nw',image=self.heartimg)
@@ -83,34 +83,33 @@ class SpaceInvader(tk.Frame):
         self.Heart3.pack(side="right")
         
         
-        self.labelScore1 = tk.Label(self.FrameGame, text="Score :", fg="green",bg="black",font=("Helvetica",50))
-        self.labelScore1.pack(anchor="ne")
+        self.labelScore1 = tk.Label(self.FrameGame, text="Score : ", fg="green",bg="black",font=("Helvetica",50))
+        self.labelScore1.pack(anchor="w")
         
         self.labelScore2 = tk.Label(self.FrameGame, text=" ",font=("Helvetica",50),bg="black", fg="green")
-        self.labelScore2.pack(anchor="ne")
+        self.labelScore2.pack(anchor="w")
+
+        self.RejouerB = tk.Button(self.FrameGame, text="RESTART",font=("Helvetica",50),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.Rejouer)
+        self.RejouerB.pack(anchor="s", expand="yes")
 
         self.Quitter = tk.Button(self.FrameGame, text="QUIT",font=("Helvetica",50),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.root.destroy)
-        self.Quitter.pack(anchor="se")
+        self.Quitter.pack(anchor="s", expand="yes")
         
         self.FrameGame.pack(fill="both",expand="yes")
 
         player=joueur(self,450,830)
-        """
-        for i in range(3):
-            x=60
-            y=60
-            if i==1:
-                enemi1=enemis1(self,x,y)
-                enemi2=enemis1(self,x,y)
-                enemi3=enemis1(self,x,y)
-                enemi4=enemis1(self,x,y)
-                enemi5=enemis1(self,x,y)
-                enemi6=enemis1(self,x,y)
-                enemi7=enemis1(self,x,y)
-                enemi8=enemis1(self,x,y)
-        """
         self.bindPlayer(player)
         #player.tir(self.canvaGame)
+
+        x=60
+        y=60
+        enemei=enemis1(self,x,y)
+
+    
+    def Rejouer(self):
+        self.FrameGame.destroy()
+        self.startPartie()
+
 
     """ 
     def clock(self):
@@ -174,7 +173,7 @@ class joueur(mobs):
         
         
     def __init__(self, canva, x, y):
-        self.imageEnemis = tk.PhotoImage(file="images\joueur.gif")
+        self.imageEnemis = tk.PhotoImage(file="images/joueur.gif")
         self.imageHeight=84
         self.imageWidth=110
         self.shots=[]
@@ -195,4 +194,4 @@ class tirShot():
             canva.move(self.shot,0,-15)
             canva.after(16,lambda : self.update(canva))
         else:
-            self.shot.destroy
+            canva.delete(self.shot)
