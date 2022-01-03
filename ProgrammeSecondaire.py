@@ -48,7 +48,8 @@ class SpaceInvader(tk.Frame):
         self.root.bind("z",lambda event, e=self.canvaGame: Player.vaUp(event, e))
         self.root.bind("q",lambda event, e=self.canvaGame: Player.vaLeft(event, e))   
         self.root.bind("s",lambda event, e=self.canvaGame: Player.vaDown(event, e))   
-        self.root.bind("d",lambda event, e=self.canvaGame: Player.vaRight(event, e))   
+        self.root.bind("d",lambda event, e=self.canvaGame: Player.vaRight(event, e)) 
+        self.root.bind("<space>",lambda event, e=self.canvaGame: Player.tir(event, e))     
             
     def startPartie(self):
         self.Menu.destroy()
@@ -102,7 +103,7 @@ class SpaceInvader(tk.Frame):
 
         player=joueur(self,450,830)
         self.bindPlayer(player)
-        player.tir(self.canvaGame)
+        #player.tir(self.canvaGame)
 
     """ 
     def clock(self):
@@ -150,10 +151,12 @@ class joueur(mobs):
         print('RIGHT')
         canva.move(self.item,10,0)
 
+
     def vaLeft(self, event, canva):
         print('LEFT')
         canva.move(self.item,-20,0)
-    def tir(self, canva):
+        self.x-=20
+    def tir(self, event,canva):
         #shot= canva.create_oval(self.x-10,self.y-20-self.imageHeight/2,self.x+10,self.y-self.imageHeight/2,fill='green')
         shot=tirShot(canva,self.x,self.y,self.imageHeight)
     #updateTir(self, shot)
@@ -168,7 +171,15 @@ class joueur(mobs):
     
 class tirShot():
     def __init__(self,canva,x,y,imageHeight):
-        shot= canva.create_oval(x-10,y-20-imageHeight/2,x+10,y-imageHeight/2,fill='green')
+        self.x=x
+        self.y=y
+        self.shot= canva.create_oval(x-10,y-20-imageHeight/2,x+10,y-imageHeight/2,fill='green')
+        self.update(canva)
     
-    
-    
+    def update(self,canva):
+        
+        if self.y<=900 and self.y>=0:
+            self.y-=15
+            canva.move(self.shot,0,-15)
+            canva.after(16,lambda : self.update(canva))
+        
