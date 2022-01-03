@@ -39,7 +39,7 @@ class SpaceInvader(tk.Frame):
         self.Démarrer = tk.Button(self.Menu, text="START",font=("Helvetica",30),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.startPartie)
         self.Démarrer.pack(side="top", expand="yes")
         
-        self.Quitter = tk.Button(self.Menu, text="QUIT",font=("Helvetica",30),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.destroy)
+        self.Quitter = tk.Button(self.Menu, text="QUIT",font=("Helvetica",30),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.root.destroy)
         self.Quitter.pack(side="top", expand="yes")
         
         self.Menu.pack(fill="both",expand="yes") 
@@ -95,7 +95,7 @@ class SpaceInvader(tk.Frame):
         self.labelScore2 = tk.Label(self.FrameGame, text=" ",font=("Helvetica",50),bg="black", fg="green")
         self.labelScore2.pack(anchor="ne")
 
-        self.Quitter = tk.Button(self.FrameGame, text="QUIT",font=("Helvetica",50),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.destroy)
+        self.Quitter = tk.Button(self.FrameGame, text="QUIT",font=("Helvetica",50),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.root.destroy)
         self.Quitter.pack(anchor="se")
         
         self.FrameGame.pack(fill="both",expand="yes")
@@ -120,20 +120,20 @@ class mobs():
 
 class enemis1(mobs):
     def __init__(self, canva, x, y):
-        self.imageEnemis = PhotoImage(file="images\enemi1.gif")
+        self.imageEnemis = PhotoImage(file="images/enemi1.gif")
         super().__init__(canva,x,y)
 class enemis2(mobs):
     def __init__(self, canva, x, y):
-        self.imageEnemis = PhotoImage(file="images\enemi2.gif")
+        self.imageEnemis = PhotoImage(file="images/enemi2.gif")
         super().__init__(canva,x,y)
 
 class enemis3(mobs):
     def __init__(self, canva, x, y):
-        self.imageEnemis = PhotoImage(file="images\enemi3.gif")
+        self.imageEnemis = PhotoImage(file="images/enemi3.gif")
         super().__init__(canva,x,y)
 
 class joueur(mobs):
-
+    """
     def vaUp(self, event, canva):
         print('UP')
         canva.move(self.item,0,-20)
@@ -141,20 +141,17 @@ class joueur(mobs):
     def vaDown(self, event, canva):
         print('DOWN')
         canva.move(self.item,0,20)
-
+    """
     def vaRight(self, event, canva):
+        x1,x2,y1,y2=self.joueur.coords
+        print(x1,x2)
         print('RIGHT')
-        canva.move(self.item,20,0)
+        canva.move(self.item,10,0)
 
     def vaLeft(self, event, canva):
         print('LEFT')
-        canva.move(self.item,-20,0)
+        canva.move(self.item,-10,0)
       
     def __init__(self, canva, x, y):
-        self.imageEnemis = tk.PhotoImage(file="images\joueur.gif")
+        self.imageEnemis = tk.PhotoImage(file='images/joueur.png')
         super().__init__(canva,x,y)
-
-    
-
-    
-    
