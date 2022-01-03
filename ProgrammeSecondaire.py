@@ -20,6 +20,7 @@ Réalise le lancement du Space Invader
 from os import spawnl
 import tkinter as tk
 from time import time
+from PIL import Image
 
 
 class SpaceInvader(tk.Frame):
@@ -143,15 +144,22 @@ class joueur(mobs):
         canva.move(self.item,0,20)
     """
     def vaRight(self, event, canva):
-        x1,x2,y1,y2=self.joueur.coords
-        print(x1,x2)
         print('RIGHT')
+        x1,x2,y1,y2=canva.coords(self.item)
+        print(x1,x2)
+        
         canva.move(self.item,10,0)
 
     def vaLeft(self, event, canva):
         print('LEFT')
         canva.move(self.item,-10,0)
+
+    def tir(self, canva):
+        shot= canva.create_oval(self.x-10,self.y-20-self.imageHeight/2,self.x+10,self.y-self.imageHeight/2,fill='green')
       
     def __init__(self, canva, x, y):
-        self.imageEnemis = tk.PhotoImage(file='images/joueur.png')
+        imgj=Image.open("images/joueur.png")
+        imgj_copy= imgj.copy()
+        imgj = imgj_copy.resize((110, 84))
+        self.imageEnemis = tk.PhotoImage(imgj)
         super().__init__(canva,x,y)
