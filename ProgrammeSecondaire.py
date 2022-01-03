@@ -102,7 +102,7 @@ class SpaceInvader(tk.Frame):
 
         player=joueur(self,450,830)
         self.bindPlayer(player)
-    
+        player.tir(self.canvaGame)
 
     """ 
     def clock(self):
@@ -113,6 +113,8 @@ class mobs():
     def __init__(self,root,x,y):
         self.canva=root.canvaGame
         self.root=root
+        self.x=x
+        self.y=y
         self.item = root.canvaGame.create_image(x,y, image=self.imageEnemis)
         root.canvaGame.pack() 
         
@@ -120,16 +122,16 @@ class mobs():
 
 class enemis1(mobs):
     def __init__(self, canva, x, y):
-        self.imageEnemis = PhotoImage(file="images\enemi1.gif")
+        self.imageEnemis = tk.PhotoImage(file="images\enemi1.gif")
         super().__init__(canva,x,y)
 class enemis2(mobs):
     def __init__(self, canva, x, y):
-        self.imageEnemis = PhotoImage(file="images\enemi2.gif")
+        self.imageEnemis = tk.PhotoImage(file="images\enemi2.gif")
         super().__init__(canva,x,y)
 
 class enemis3(mobs):
     def __init__(self, canva, x, y):
-        self.imageEnemis = PhotoImage(file="images\enemi3.gif")
+        self.imageEnemis = tk.PhotoImage(file="images\enemi3.gif")
         super().__init__(canva,x,y)
 
 class joueur(mobs):
@@ -149,9 +151,15 @@ class joueur(mobs):
     def vaLeft(self, event, canva):
         print('LEFT')
         canva.move(self.item,-20,0)
-      
+    def tir(self, canva):
+        shot= canva.create_oval(self.x-10,self.y-20-self.imageHeight/2,self.x+10,self.y-self.imageHeight/2,fill='green')
+    def updateTir(self, shot)
+        
+        
     def __init__(self, canva, x, y):
         self.imageEnemis = tk.PhotoImage(file="images\joueur.gif")
+        self.imageHeight=84
+        self.imageWidth=110
         super().__init__(canva,x,y)
 
     
