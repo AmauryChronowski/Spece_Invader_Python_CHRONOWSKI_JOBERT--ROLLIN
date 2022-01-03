@@ -20,7 +20,6 @@ Réalise le lancement du Space Invader
 from os import spawnl
 import tkinter as tk
 from time import time
-from PIL import Image
 
 
 class SpaceInvader(tk.Frame):
@@ -102,8 +101,24 @@ class SpaceInvader(tk.Frame):
         self.FrameGame.pack(fill="both",expand="yes")
 
         player=joueur(self,450,830)
+        
+        for i in range(3):
+            x=60
+            y=60
+            if i==1:
+                enemi1=enemis1(self,x,y)
+                """
+                enemi2=enemis1(self,x,y)
+                enemi3=enemis1(self,x,y)
+                enemi4=enemis1(self,x,y)
+                enemi5=enemis1(self,x,y)
+                enemi6=enemis1(self,x,y)
+                enemi7=enemis1(self,x,y)
+                enemi8=enemis1(self,x,y)
+                """
+
         self.bindPlayer(player)
-    
+        player.tir(self.canvaGame)
 
     """ 
     def clock(self):
@@ -114,6 +129,8 @@ class mobs():
     def __init__(self,root,x,y):
         self.canva=root.canvaGame
         self.root=root
+        self.x=x
+        self.y=y
         self.item = root.canvaGame.create_image(x,y, image=self.imageEnemis)
         root.canvaGame.pack() 
         
@@ -121,16 +138,16 @@ class mobs():
 
 class enemis1(mobs):
     def __init__(self, canva, x, y):
-        self.imageEnemis = PhotoImage(file="images/enemi1.gif")
+        self.imageEnemis = tk.PhotoImage(file="images/enemi1.gif")
         super().__init__(canva,x,y)
 class enemis2(mobs):
     def __init__(self, canva, x, y):
-        self.imageEnemis = PhotoImage(file="images/enemi2.gif")
+        self.imageEnemis = tk.PhotoImage(file="images/enemi2.gif")
         super().__init__(canva,x,y)
 
 class enemis3(mobs):
     def __init__(self, canva, x, y):
-        self.imageEnemis = PhotoImage(file="images/enemi3.gif")
+        self.imageEnemis = tk.PhotoImage(file="images/enemi3.gif")
         super().__init__(canva,x,y)
 
 class joueur(mobs):
@@ -145,21 +162,21 @@ class joueur(mobs):
     """
     def vaRight(self, event, canva):
         print('RIGHT')
-        x1,x2,y1,y2=canva.coords(self.item)
-        print(x1,x2)
-        
-        canva.move(self.item,10,0)
+        x1,y1,x2,y2=canva.bbox(self.item)
+        print(x1,x2,y1,y2)
+        if x2+10<900:
+            canva.move(self.item,10,0)
 
     def vaLeft(self, event, canva):
         print('LEFT')
-        canva.move(self.item,-10,0)
+        x1,y1,x2,y2=canva.bbox(self.item)
+        print(x1,x2,y1,y2)
+        if x1-10>0:
+            canva.move(self.item,-10,0)
 
     def tir(self, canva):
-        shot= canva.create_oval(self.x-10,self.y-20-self.imageHeight/2,self.x+10,self.y-self.imageHeight/2,fill='green')
-      
+        shot= canva.create_oval(self.x-10,self.y-20-self.imageHeight/2,self.x+10,self.y-self.imageHeight/2,fill='green')   
+
     def __init__(self, canva, x, y):
-        imgj=Image.open("images/joueur.png")
-        imgj_copy= imgj.copy()
-        imgj = imgj_copy.resize((110, 84))
-        self.imageEnemis = tk.PhotoImage(imgj)
+        self.imageEnemis = tk.PhotoImage(file="images/joueur.gif")
         super().__init__(canva,x,y)
