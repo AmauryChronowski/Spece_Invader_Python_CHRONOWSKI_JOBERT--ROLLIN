@@ -13,6 +13,7 @@ Réalise le lancement du Space Invader
 from os import spawnl
 import tkinter as tk
 from time import time
+from tkinter.constants import X
 
 
 class SpaceInvader(tk.Frame):
@@ -125,8 +126,11 @@ class SpaceInvader(tk.Frame):
 
         obstacl=obstacle(self,75,700)
         player=joueur(self,450,830)
+        ennemi=Ennemi(self,50,300)
+
+        """        
         enemei=enemis1(self,350,330)
-        enemei2=enemis1(self,250,330)
+        enemei2=enemis1(self,250,330)"""
         self.bindPlayer(player)
         self.gameLoop(player)
 
@@ -180,20 +184,40 @@ class mobs():
             self.item=[self.canva.create_image(x,y, image=self.imageEnemis)] """
         mobs.item.append(self.canva.create_image(x,y, image=self.imageEnemis))
         #root.canvaGame.create_image(x,y, image=self.imageEnemis)
-        self.canva.pack() 
+        self.canva.pack()
+        print(mobs.item)
         
     
-class Ennemi(mobs):
-    def __init__(self,root):
+class Ennemi():
+    def __init__(self,root,x,y):
         self.canva=root.canvaGame
         self.root=root
-        self.x=0
-        self.y=0
+        self.x=x
+        self.y=y
         self.listeEnnemies=[]
         for i in range(6):
-            fileEnnemies=[]
-            self.imageEnemis = tk.PhotoImage(file="images/enemi1.gif")
-        super().__init__(canva,x,y)
+            filleEnnemies=[]
+            imageEnemis = tk.PhotoImage(file="images/enemi1.gif")
+            """img=self.canva.create_image(self.x,self.y, image=imageEnemis)"""
+            filleEnnemies.append(self.canva.create_rectangle (self.x,self.y,self.x+25,self.y-25,outline="gray",fill="green"))
+            """filleEnnemies.append(img)"""
+            self.y-=100
+            imageEnemis = tk.PhotoImage(file="images/enemi2.gif")
+            """img=self.canva.create_image(self.x,self.y, image=imageEnemis)"""
+            filleEnnemies.append(self.canva.create_rectangle (self.x,self.y,self.x+25,self.y-25,outline="gray",fill="red"))
+            """filleEnnemies.append(img)"""
+            self.y-=100
+            imageEnemis = tk.PhotoImage(file="images/enemi2.gif")
+            """img=self.canva.create_image(self.x,self.y, image=imageEnemis)"""
+            filleEnnemies.append(self.canva.create_rectangle (self.x,self.y,self.x+25,self.y-25,outline="gray",fill="white"))
+            """filleEnnemies.append(img)"""
+            self.y=300
+            self.x+=100
+            self.listeEnnemies.append(filleEnnemies)
+        print(self.listeEnnemies)
+
+
+
 
 
 """
