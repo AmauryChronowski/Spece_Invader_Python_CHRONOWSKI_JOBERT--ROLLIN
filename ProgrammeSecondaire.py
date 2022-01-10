@@ -14,14 +14,20 @@ from os import spawnl
 import tkinter as tk
 from time import time
 from tkinter.constants import X
+from random import random
 
 
 class SpaceInvader(tk.Frame):
-    def __init__(self,root):
+    def __init__(self,root, img1,img2,img3):
         super().__init__(root)
         self.root=root
+
+        self.img1 = img1
+        self.img2 = img2
+        self.img3 = img3
         # Fentêtre
         
+
         
 
         # Menu
@@ -104,6 +110,8 @@ class SpaceInvader(tk.Frame):
         
         self.FrameGame.pack(fill="both",expand="yes")
 
+        
+
         self.gameStart()
         
         
@@ -126,15 +134,15 @@ class SpaceInvader(tk.Frame):
 
         obstacl=obstacle(self,75,700)
         player=joueur(self,450,830)
-        ennemi=Ennemi(self,50,300)
+        ennemi=Ennemi(self,50,300, self.img1,self.img2,self.img3)
 
         """        
         enemei=enemis1(self,350,330)
         enemei2=enemis1(self,250,330)"""
         self.bindPlayer(player)
-        self.gameLoop(player)
+        self.gameLoop(player,ennemi,1,"d")
 
-    def gameLoop(self,player):
+    def gameLoop(self,player,ennemi,speed,sens):
         if player.shots != []:
             for shoot in player.shots:
                 shoot.update(self.canvaGame)
@@ -146,7 +154,13 @@ class SpaceInvader(tk.Frame):
             player.vaRight(self.canvaGame)
         if player.vaLeftBool ==True:
             player.vaLeft(self.canvaGame)
-        self.canvaGame.after(16,lambda : self.gameLoop(player))
+        sens,speed=ennemi.move(self.canvaGame,speed,sens)
+        ennemi.tire(self.canvaGame)
+        if ennemi.shots != []:
+            for shoot in ennemi.shots:
+                shoot.update(self.canvaGame)
+        self.canvaGame.after(16,lambda : self.gameLoop(player,ennemi,speed,sens))
+
         
 
 class obstacle():
@@ -189,32 +203,62 @@ class mobs():
         
     
 class Ennemi():
-    def __init__(self,root,x,y):
+    def __init__(self,root,x,y,img1,img2,img3):
         self.canva=root.canvaGame
+        self.shots=[]
         self.root=root
         self.x=x
         self.y=y
         self.listeEnnemies=[]
         for i in range(6):
             filleEnnemies=[]
-            imageEnemis = tk.PhotoImage(file="images/enemi1.gif")
-            """img=self.canva.create_image(self.x,self.y, image=imageEnemis)"""
-            filleEnnemies.append(self.canva.create_rectangle (self.x,self.y,self.x+25,self.y-25,outline="gray",fill="green"))
-            """filleEnnemies.append(img)"""
+            filleEnnemies.append(self.canva.create_image(self.x,self.y, image=img1))
             self.y-=100
-            imageEnemis = tk.PhotoImage(file="images/enemi2.gif")
-            """img=self.canva.create_image(self.x,self.y, image=imageEnemis)"""
-            filleEnnemies.append(self.canva.create_rectangle (self.x,self.y,self.x+25,self.y-25,outline="gray",fill="red"))
-            """filleEnnemies.append(img)"""
+            filleEnnemies.append(self.canva.create_image(self.x,self.y, image=img2))
             self.y-=100
-            imageEnemis = tk.PhotoImage(file="images/enemi2.gif")
-            """img=self.canva.create_image(self.x,self.y, image=imageEnemis)"""
-            filleEnnemies.append(self.canva.create_rectangle (self.x,self.y,self.x+25,self.y-25,outline="gray",fill="white"))
-            """filleEnnemies.append(img)"""
+            filleEnnemies.append(self.canva.create_image(self.x,self.y, image=img3))
             self.y=300
             self.x+=100
             self.listeEnnemies.append(filleEnnemies)
         print(self.listeEnnemies)
+
+    def tire(self,canva):
+
+        for i in range(6):
+            E=self.listeEnnemies[i][2]
+            prob=random()
+            if prob<0.01:
+                self.shots.append(tireE(canva,E))
+            
+
+    def move(self,canva,speed,sens):
+        Ed=self.listeEnnemies[5][0]
+        Eg=self.listeEnnemies[0][0]
+        xd1,yd,xd2,yd=canva.bbox(Ed)
+        xg1,yg,xg2,yg=canva.bbox(Eg)
+        if xd2+speed>=900 and sens=="d":
+            for i in self.listeEnnemies:
+                for j in i:
+                    canva.move(j,0,10)
+            speed+=0.25
+            sens="g"
+            return sens,speed
+        if xg1-speed<=0 and sens=="g":
+            for i in self.listeEnnemies:
+                for j in i:
+                    canva.move(j,0,10)
+            speed+=0.25
+            sens="d"
+            return sens,speed
+        for i in self.listeEnnemies:
+            for j in i:
+                x1,y1,x2,y2=canva.bbox(j)
+                if x2+speed<900 and sens=="d":
+                    canva.move(j,speed,0)
+                elif x1-speed>0 and sens=="g":
+                    canva.move(j,-speed,0)
+        return sens,speed
+    
 
 
 
@@ -311,12 +355,25 @@ class tirShot():
         self.update(canva)
     
     def update(self,canva):
-        
-        if self.y<=900 and self.y>=0:
-            self.y-=15
-            canva.move(self.shot,0,-15)
-            #canva.after(16,lambda : self.update(canva))
-        else:
-            canva.delete(self.shot)
-            self.person.shots.pop()
+            if self.y<=900 and self.y>=0:
+                self.y-=15
+                canva.move(self.shot,0,-15)
+            else:
+                canva.delete(self.shot)
+                self.person.shots.pop()
 
+class tireE():
+    def __init__(self,canva,entity):
+        self.entity=entity
+        self.x1,self.y1,self.x2,self.y2=canva.bbox(self.entity)
+        self.x=(self.x1+self.x2)/2
+        self.y=self.y1+60
+        self.shotE= canva.create_oval(self.x-5,self.y-5,self.x+5,self.y+5,fill='red')
+        self.update(canva)
+
+    def update(self,canva):
+        if self.y<=900 and self.y>=0:
+            self.y+=5
+            canva.move(self.shotE,0,+5)        
+        else:
+            canva.delete(self.shotE)
