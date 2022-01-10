@@ -105,18 +105,13 @@ class SpaceInvader(tk.Frame):
 
         self.gameStart()
         
-        for i in range(3):
-            x=60
-            y=60
-            if i==1:
-                enemi1=enemis1(self,x,y)
-                print('ennemis cree')
-                
+        
+        
         
         
         #player.tir(self.canvaGame)
 
-        enemei=enemis1(self,450,830)
+        
 
     def Rejouer(self):
         self.FrameGame.destroy()
@@ -127,7 +122,10 @@ class SpaceInvader(tk.Frame):
         return time.time()-self.clockStartTime
     """
     def gameStart(self):
+        enemei=enemis1(self,350,330)
         player=joueur(self,450,830)
+        enemei=enemis1(self,250,330)
+        
         self.bindPlayer(player)
         self.gameLoop(player)
 
@@ -136,7 +134,7 @@ class SpaceInvader(tk.Frame):
             for shoot in player.shots:
                 shoot.update(self.canvaGame)
         if player.vaUpBool ==True:
-            self.canvaGame.move(player.item,0,-20) 
+            player.vaUp(self.canvaGame)
         if player.vaDownBool ==True:
             player.vaDown(self.canvaGame)
         if player.vaRightBool ==True:
@@ -157,18 +155,40 @@ class mobs():
         self.root=root
         self.x=x
         self.y=y
-        self.item = root.canvaGame.create_image(x,y, image=self.imageEnemis)
+        try:
+            self.item.append(root.canvaGame.create_image(x,y, image=self.imageEnemis))
+        except Exception:
+            print("liste pas encore crée") 
+            self.item=[root.canvaGame.create_image(x,y, image=self.imageEnemis)]
+        root.canvaGame.create_image(x,y, image=self.imageEnemi)
         root.canvaGame.pack() 
         
     
 
 class enemis1(mobs):
     def __init__(self, canva, x, y):
-        print('rouge')
-        self.imageEnemis = tk.PhotoImage(file="images/enemi1.gif")
+        
+        self.imageEnemis = tk.PhotoImage(file="images\enemi1.gif")
         super().__init__(canva,x,y)
         it = self.canva.create_rectangle(50,50,60,60,fill='red')
         print('rouge')
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
 class enemis2(mobs):
     def __init__(self, canva, x, y):
         self.imageEnemis = tk.PhotoImage(file="images/enemi2.gif")
@@ -201,7 +221,7 @@ class joueur(mobs):
         self.vaRightBool=False
     def vaRightPress(self, event, canva):
         self.vaRightBool=True
-        
+
     def vaLeftRelease(self, event, canva):
         self.vaLeftBool=False
     def vaLeftPress(self, event, canva):
@@ -211,13 +231,13 @@ class joueur(mobs):
     def vaRight(self, canva):
         x1,y1,x2,y2=canva.bbox(self.item)
         if x2+10<900:
-            canva.move(self.item,10,0)
+            canva.move(self.item[0],10,0)
             self.x+=10
 
     def vaLeft(self, canva):
         x1,y1,x2,y2=canva.bbox(self.item)
         if x1-10>0:
-            canva.move(self.item,-10,0)
+            canva.move(self.item[0],-10,0)
             self.x-=10
             
     def tir(self, event,canva):
