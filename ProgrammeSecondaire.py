@@ -122,11 +122,15 @@ class SpaceInvader(tk.Frame):
         return time.time()-self.clockStartTime
     """
     def gameStart(self):
+
+        obstacl=obstacle(self,100,700)
         player=joueur(self,450,830)
         enemei=enemis1(self,350,330)
+        print('3')
+        print('1')   
+        print('2')
         enemei2=enemis1(self,250,330)
-        
-        
+        print('4')
         self.bindPlayer(player)
         self.gameLoop(player)
 
@@ -146,9 +150,25 @@ class SpaceInvader(tk.Frame):
         
 
 class obstacle():
-    def __init__(self,root):
+    def __init__(self,root,x,y):
         self.canva=root.canvaGame
         self.root=root
+        self.x=x
+        self.y=y
+        self.listeobstacle=[]
+        for h in  range(3):
+            for i in range(6):
+
+                for j in range(3):
+                    listehaut=[]
+                    listehaut.append(self.canva.create_rectangle (self.x,self.y,self.x+25,self.y-25,outline="gray",fill="green"))
+                    self.y-=25
+                self.x+=25
+                self.y=y
+                self.listeobstacle.append(listehaut)
+            self.x=x+300
+            self.y=y
+
 
 class mobs():
     item=[]
@@ -170,26 +190,10 @@ class mobs():
 class enemis1(mobs):
     def __init__(self, canva, x, y):
         
-        self.imageEnemis = tk.PhotoImage(file="images\enemi1.gif")
+        self.imageEnemis = tk.PhotoImage(file="images/enemi1.gif")
         super().__init__(canva,x,y)
         it = self.canva.create_rectangle(50,50,60,60,fill='red')
         print('rouge')
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
 
 class enemis2(mobs):
     def __init__(self, canva, x, y):
@@ -229,7 +233,6 @@ class joueur(mobs):
     def vaLeftPress(self, event, canva):
         self.vaLeftBool=True
 
-   
     def vaRight(self, canva):
         x1,y1,x2,y2=canva.bbox(mobs.item[0])
         if x2+10<900:
@@ -255,7 +258,7 @@ class joueur(mobs):
         self.vaDownBool=False
         self.vaUpBool=False
 
-        self.imageEnemis = tk.PhotoImage(file="images\joueur.gif")
+        self.imageEnemis = tk.PhotoImage(file="images/joueur.gif")
         self.imageHeight=84
         self.imageWidth=110
         self.shots=[]
@@ -282,3 +285,4 @@ class tirShot():
         else:
             canva.delete(self.shot)
             self.person.shots.pop()
+
