@@ -4,17 +4,10 @@
 
 """
 Programme secondaire Sapce Invader
-
 Amaury CHRONOWSKI/Gabin JOBERT--ROLLIN
-
 15/11/2021
-
 Réalise le lancement du Space Invader
-
-
-
 -------
-
 """
 #Importation de bibliothèques nécessaires
 from os import spawnl
@@ -45,14 +38,16 @@ class SpaceInvader(tk.Frame):
         self.Menu.pack(fill="both",expand="yes") 
 
     def bindPlayer(self,Player):
-        self.root.bind("<KeyRelease-z>",lambda event, e=self.canvaGame: Player.vaUpRelease)
+        self.root.bind("<KeyRelease-z>",lambda event, e=self.canvaGame: Player.vaUpRelease(event, e))
         self.root.bind("<KeyPress-z>",lambda event, e=self.canvaGame: Player.vaUpPress(event, e))
         self.root.bind("<KeyRelease-s>",lambda event, e=self.canvaGame: Player.vaDownRelease(event, e))
         self.root.bind("<KeyPress-s>",lambda event, e=self.canvaGame: Player.vaDownPress(event, e))
-        self.root.bind("q",lambda event, e=self.canvaGame: Player.vaLeft(event, e))   
-          
-        self.root.bind("d",lambda event, e=self.canvaGame: Player.vaRight(event, e)) 
-        
+        self.root.bind("<KeyRelease-q>",lambda event, e=self.canvaGame: Player.vaLeftRelease(event, e))
+        self.root.bind("<KeyPress-q>",lambda event, e=self.canvaGame: Player.vaLeftPress(event, e))
+        self.root.bind("<KeyRelease-d>",lambda event, e=self.canvaGame: Player.vaRightRelease(event, e))
+        self.root.bind("<KeyPress-d>",lambda event, e=self.canvaGame: Player.vaRightPress(event, e))
+
+       
         self.root.bind("<space>",lambda event, e=self.canvaGame: Player.tir(event, e))     
             
     def startPartie(self):
@@ -75,11 +70,11 @@ class SpaceInvader(tk.Frame):
         self.heartimg=tk.PhotoImage(file='images/heart.png')
         
         self.FreamHeart1= tk.Frame(self.FreamHeartContain,bg="black")
-        self.FreamHeart1.pack()
+        self.FreamHeart1.pack(side='left')
         self.FreamHeart2= tk.Frame(self.FreamHeartContain,bg="black")
-        self.FreamHeart2.pack()
+        self.FreamHeart2.pack(side='left')
         self.FreamHeart3= tk.Frame(self.FreamHeartContain,bg="black")
-        self.FreamHeart3.pack()
+        self.FreamHeart3.pack(side='right')
         
         self.Heart1=tk.Canvas(self.FreamHeart1,height=180,width=180,bg="black",highlightthickness=0)
         self.Heart1.create_image(0,0,anchor='nw',image=self.heartimg)
@@ -94,14 +89,17 @@ class SpaceInvader(tk.Frame):
         self.Heart3.pack(side="right")
         
         
-        self.labelScore1 = tk.Label(self.FrameGame, text="Score :", fg="green",bg="black",font=("Helvetica",50))
-        self.labelScore1.pack(anchor="ne")
+        self.labelScore1 = tk.Label(self.FrameGame, text="Score : ", fg="green",bg="black",font=("Helvetica",50))
+        self.labelScore1.pack(anchor="w")
         
-        self.labelScore2 = tk.Label(self.FrameGame, text=" ",font=("Helvetica",50),bg="black", fg="green")
-        self.labelScore2.pack(anchor="ne")
+        self.labelScore2 = tk.Label(self.FrameGame, text="0",font=("Helvetica",50),bg="black", fg="green")
+        self.labelScore2.pack(anchor="w")
+
+        self.RejouerB = tk.Button(self.FrameGame, text="RESTART",font=("Helvetica",50),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.Rejouer)
+        self.RejouerB.pack(anchor="s", expand="yes")
 
         self.Quitter = tk.Button(self.FrameGame, text="QUIT",font=("Helvetica",50),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.root.destroy)
-        self.Quitter.pack(anchor="se")
+        self.Quitter.pack(anchor="s", expand="yes")
         
         self.FrameGame.pack(fill="both",expand="yes")
 
@@ -118,10 +116,15 @@ class SpaceInvader(tk.Frame):
         
         #player.tir(self.canvaGame)
 
+        enemei=enemis1(self,450,830)
+
+    def Rejouer(self):
+        self.FrameGame.destroy()
+        self.startPartie()
+
     """ 
     def clock(self):
         return time.time()-self.clockStartTime
-
     """
     def gameStart(self):
         player=joueur(self,450,830)
@@ -136,8 +139,18 @@ class SpaceInvader(tk.Frame):
             self.canvaGame.move(player.item,0,-20) 
         if player.vaDownBool ==True:
             player.vaDown(self.canvaGame)
+        if player.vaRightBool ==True:
+            player.vaRight(self.canvaGame)
+        if player.vaLeftBool ==True:
+            player.vaLeft(self.canvaGame)
         self.canvaGame.after(16,lambda : self.gameLoop(player))
         
+
+class obstacle():
+    def __init__(self,root):
+        self.canva=root.canvaGame
+        self.root=root
+
 class mobs():
     def __init__(self,root,x,y):
         self.canva=root.canvaGame
@@ -167,7 +180,7 @@ class enemis3(mobs):
         super().__init__(canva,x,y)
 
 class joueur(mobs):
-    def vaUpRelease(self, event, canva):
+    """ def vaUpRelease(self, event, canva):
         self.vaUpBool=False
     def vaUpPress(self, event, canva):
         self.vaUpBool=True
@@ -183,19 +196,26 @@ class joueur(mobs):
     def vaDown(self, canva):
         print('DOWN')
         canva.move(self.item,0,20)
-    
-    def vaRight(self, event, canva):
-        print('RIGHT')
+     """
+    def vaRightRelease(self, event, canva):
+        self.vaRightBool=False
+    def vaRightPress(self, event, canva):
+        self.vaRightBool=True
+        
+    def vaLeftRelease(self, event, canva):
+        self.vaLeftBool=False
+    def vaLeftPress(self, event, canva):
+        self.vaLeftBool=True
+
+   
+    def vaRight(self, canva):
         x1,y1,x2,y2=canva.bbox(self.item)
-        print(x1,x2,y1,y2)
         if x2+10<900:
             canva.move(self.item,10,0)
             self.x+=10
 
-    def vaLeft(self, event, canva):
-        print('LEFT')
+    def vaLeft(self, canva):
         x1,y1,x2,y2=canva.bbox(self.item)
-        print(x1,x2,y1,y2)
         if x1-10>0:
             canva.move(self.item,-10,0)
             self.x-=10
@@ -208,7 +228,7 @@ class joueur(mobs):
         
         
     def __init__(self, canva, x, y):
-        self.RightBool=False
+        self.vaRightBool=False
         self.vaLeftBool=False
         self.vaDownBool=False
         self.vaUpBool=False
