@@ -122,14 +122,11 @@ class SpaceInvader(tk.Frame):
         return time.time()-self.clockStartTime
     """
     def gameStart(self):
-        enemei=enemis1(self,350,330)
-        print('3')
-        print('1')
-        
-        print('2')
-        enemei2=enemis1(self,250,330)
         player=joueur(self,450,830)
-        print('4')
+        enemei=enemis1(self,350,330)
+        enemei2=enemis1(self,250,330)
+        
+        
         self.bindPlayer(player)
         self.gameLoop(player)
 
@@ -154,15 +151,17 @@ class obstacle():
         self.root=root
 
 class mobs():
+    item=[]
     def __init__(self,root,x,y):
         self.canva=root.canvaGame
         self.x=x
         self.y=y
-        try:
+        """ try:
             self.item.append(self.canva.create_image(x,y, image=self.imageEnemis))
         except Exception:
             print("liste pas encore crée") 
-            self.item=[self.canva.create_image(x,y, image=self.imageEnemis)]
+            self.item=[self.canva.create_image(x,y, image=self.imageEnemis)] """
+        mobs.item.append(self.canva.create_image(x,y, image=self.imageEnemis))
         #root.canvaGame.create_image(x,y, image=self.imageEnemis)
         self.canva.pack() 
         
@@ -232,15 +231,15 @@ class joueur(mobs):
 
    
     def vaRight(self, canva):
-        x1,y1,x2,y2=canva.bbox(self.item)
+        x1,y1,x2,y2=canva.bbox(mobs.item[0])
         if x2+10<900:
-            canva.move(self.item[0],10,0)
+            canva.move(mobs.item[0],10,0)
             self.x+=10
 
     def vaLeft(self, canva):
-        x1,y1,x2,y2=canva.bbox(self.item)
+        x1,y1,x2,y2=canva.bbox(mobs.item[0])
         if x1-10>0:
-            canva.move(self.item[0],-10,0)
+            canva.move(mobs.item[0],-10,0)
             self.x-=10
             
     def tir(self, event,canva):
