@@ -123,14 +123,10 @@ class SpaceInvader(tk.Frame):
     """
     def gameStart(self):
 
-        obstacl=obstacle(self,100,700)
+        obstacl=obstacle(self,75,700)
         player=joueur(self,450,830)
         enemei=enemis1(self,350,330)
-        print('3')
-        print('1')   
-        print('2')
         enemei2=enemis1(self,250,330)
-        print('4')
         self.bindPlayer(player)
         self.gameLoop(player)
 
@@ -158,16 +154,17 @@ class obstacle():
         self.listeobstacle=[]
         for h in  range(3):
             for i in range(6):
-
+                Pileobstacle=[]
                 for j in range(3):
-                    listehaut=[]
-                    listehaut.append(self.canva.create_rectangle (self.x,self.y,self.x+25,self.y-25,outline="gray",fill="green"))
+                    Pileobstacle.append(self.canva.create_rectangle (self.x,self.y,self.x+25,self.y-25,outline="gray",fill="green"))
                     self.y-=25
                 self.x+=25
                 self.y=y
-                self.listeobstacle.append(listehaut)
-            self.x=x+300
+                self.listeobstacle.append(Pileobstacle)
+            self.x=x+(h+1)*300
             self.y=y
+
+
 
 
 class mobs():
@@ -184,7 +181,20 @@ class mobs():
         self.canva.pack() 
         
     
+class Ennemi(mobs):
+    def __init__(self,root):
+        self.canva=root.canvaGame
+        self.root=root
+        self.x=0
+        self.y=0
+        self.listeEnnemies=[]
+        for i in range(6):
+            fileEnnemies=[]
+            self.imageEnemis = tk.PhotoImage(file="images/enemi1.gif")
+        super().__init__(canva,x,y)
 
+
+"""
 class enemis1(mobs):
     def __init__(self, canva, x, y):
         
@@ -202,7 +212,7 @@ class enemis3(mobs):
     def __init__(self, canva, x, y):
         self.imageEnemis = tk.PhotoImage(file="images/enemi3.gif")
         super().__init__(canva,x,y)
-
+"""
 class joueur(mobs):
     """ def vaUpRelease(self, event, canva):
         self.vaUpBool=False
