@@ -168,15 +168,17 @@ class obstacle():
 
 
 class mobs():
+    item=[]
     def __init__(self,root,x,y):
         self.canva=root.canvaGame
         self.x=x
         self.y=y
-        try:
+        """ try:
             self.item.append(self.canva.create_image(x,y, image=self.imageEnemis))
         except Exception:
             print("liste pas encore crée") 
-            self.item=[self.canva.create_image(x,y, image=self.imageEnemis)]
+            self.item=[self.canva.create_image(x,y, image=self.imageEnemis)] """
+        mobs.item.append(self.canva.create_image(x,y, image=self.imageEnemis))
         #root.canvaGame.create_image(x,y, image=self.imageEnemis)
         self.canva.pack() 
         
@@ -242,15 +244,15 @@ class joueur(mobs):
         self.vaLeftBool=True
 
     def vaRight(self, canva):
-        x1,y1,x2,y2=canva.bbox(self.item)
+        x1,y1,x2,y2=canva.bbox(mobs.item[0])
         if x2+10<900:
-            canva.move(self.item[0],10,0)
+            canva.move(mobs.item[0],10,0)
             self.x+=10
 
     def vaLeft(self, canva):
-        x1,y1,x2,y2=canva.bbox(self.item)
+        x1,y1,x2,y2=canva.bbox(mobs.item[0])
         if x1-10>0:
-            canva.move(self.item[0],-10,0)
+            canva.move(mobs.item[0],-10,0)
             self.x-=10
             
     def tir(self, event,canva):
