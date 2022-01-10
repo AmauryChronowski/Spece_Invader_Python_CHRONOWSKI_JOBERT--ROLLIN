@@ -123,9 +123,13 @@ class SpaceInvader(tk.Frame):
     """
     def gameStart(self):
         enemei=enemis1(self,350,330)
-        player=joueur(self,450,830)
-        enemei=enemis1(self,250,330)
+        print('3')
+        print('1')
         
+        print('2')
+        enemei2=enemis1(self,250,330)
+        player=joueur(self,450,830)
+        print('4')
         self.bindPlayer(player)
         self.gameLoop(player)
 
@@ -152,16 +156,15 @@ class obstacle():
 class mobs():
     def __init__(self,root,x,y):
         self.canva=root.canvaGame
-        self.root=root
         self.x=x
         self.y=y
         try:
-            self.item.append(root.canvaGame.create_image(x,y, image=self.imageEnemis))
+            self.item.append(self.canva.create_image(x,y, image=self.imageEnemis))
         except Exception:
             print("liste pas encore crée") 
-            self.item=[root.canvaGame.create_image(x,y, image=self.imageEnemis)]
-        root.canvaGame.create_image(x,y, image=self.imageEnemi)
-        root.canvaGame.pack() 
+            self.item=[self.canva.create_image(x,y, image=self.imageEnemis)]
+        #root.canvaGame.create_image(x,y, image=self.imageEnemis)
+        self.canva.pack() 
         
     
 
