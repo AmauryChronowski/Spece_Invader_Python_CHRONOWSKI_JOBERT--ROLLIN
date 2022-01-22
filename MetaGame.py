@@ -168,8 +168,6 @@ class Meta(tk.Frame):
         
         #Fonction qui lance une partie
         self.startPartie()
-        arestart=True
-
 
     def gameStart(self):
     #Fonction qui enclanche la partie | Lance : Fonction qui associe les touches du clavier à des actions et la fonction qui rafréchit en continue du jeu
