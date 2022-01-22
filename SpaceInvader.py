@@ -3,7 +3,7 @@
 
 """
 
-Programme principale Sapce Invader
+Programme principale Space Invader
 
 Que fait ce programme : Réalise le lancement du Space Invader
 
@@ -16,7 +16,8 @@ Que reste-t-il à faire :
 """
 
 #Importation de bibliothèques nécessaires
-from ProgrammeSecondaire import SpaceInvader
+from MetaGame import SpaceInvader
+
 import tkinter as tk
 
 #Programme principal

@@ -12,7 +12,8 @@ Que reste-t-il à faire :
 #Importation de bibliothèques nécessaires
 import tkinter as tk
 from random import random
-
+import ClasseProjectiles as CP
+import GameElements as GE
 #Fonctions utilisées dans le programme principal
 class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
     def __init__(self,root, img1,img2,img3,img4,img5,img6): #initialisation de la fenêtre de jeu | Reçoit : les images des ennemies
@@ -74,7 +75,7 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
         #Initialisation de la variable permétant de modifier le score
         self.scoreStr = tk.StringVar()  
         self.scoreStr.set(str(self.scoreVar))
-        print(Ennemi.shotsE)
+        print(GE.Ennemi.shotsE)
         #Jeu
 
         #Frame du jeu
@@ -139,9 +140,9 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
         #Détruit la frame de jeu
         self.frameGame.destroy()
         
-        Joueur.item=[]
-        Ennemi.shotsE=[]
-        Obstacle.listeobstacle=[]
+        GE.Joueur.theJoueur=[]
+        GE.Ennemi.shotsE=[]
+        GE.Obstacle.listeobstacle=[]
         
         #Fonction qui lance une partie
         self.startPartie()
@@ -149,9 +150,9 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
     def gameStart(self): #Fonction qui enclanche la partie | Lance : Fonction qui associe les touches du clavier à des actions et la fonction qui rafréchit en continue du jeu
         
         #Objet utilisés dans les fonctions
-        obstacl=Obstacle(self,75,700) #Obstacles protégant le joueur
-        player=Joueur(self,450,830) #Elément joeur
-        ennemi=Ennemi(self,50,300, self.img1,self.img2,self.img3,self.img5,self.img6) #Différents ennemies utilisés
+        obstacl=GE.Obstacle(self,75,700) #Obstacles protégant le joueur
+        player=GE.Joueur(self,450,830) #Elément joeur
+        ennemi=GE.Ennemi(self,50,300, self.img1,self.img2,self.img3,self.img5,self.img6) #Différents ennemies utilisés
 
         self.bindPlayer(player,ennemi,self.scoreVar) #Fonction qui associe les touches du clavier à des actions
         self.gameLoop(player,ennemi,obstacl,1,"d") #Fonction qui rafréchit en continue du jeu
@@ -212,28 +213,28 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
         if  ennemi.listeEnnemies!=[]:
             sens,speed=ennemi.move(self.canvaGame,speed,sens)
             ennemi.tire(self.canvaGame)
-            if Ennemi.shotsE != []:
-                for shoot in Ennemi.shotsE:
+            if GE.Ennemi.shotsE != []:
+                for shoot in GE.Ennemi.shotsE:
                     self.vie=shoot.updateE(self.canvaGame,self.vie,self.freamHeart1,self.freamHeart2,self.freamHeart3)
             self.scoreStr.set(str(self.scoreVar))
 
         elif ennemi.boss==0 and ennemi.listeEnnemies==[]:
             speed=10
             ennemi.Boss(self.img4,self.canvaGame)
-            if Ennemi.shotsE != []:
-                for shoot in Ennemi.shotsE:
+            if GE.Ennemi.shotsE != []:
+                for shoot in GE.Ennemi.shotsE:
                     self.vie=shoot.updateE(self.canvaGame,self.vie,self.freamHeart1,self.freamHeart2,self.freamHeart3)
  
 
         else:
-            if Ennemi.shotsE != []:
-                for shoot in Ennemi.shotsE:
+            if GE.Ennemi.shotsE != []:
+                for shoot in GE.Ennemi.shotsE:
                     self.vie=shoot.updateE(self.canvaGame,self.vie,self.freamHeart1,self.freamHeart2,self.freamHeart3)
             sens,speed=ennemi.BossMouv(self.canvaGame,speed,sens)
 
             if self.rafaleNb<=40 and self.rafale=="yes":
                 self.rafaleNb+=1              
-                Ennemi.shotsE.append(TireE(self.canvaGame,ennemi.boss))
+                GE.Ennemi.shotsE.append(CP.TireE(self.canvaGame,ennemi.boss))
 
             elif self.rafaleNb>40 and self.rafale=="yes":
                 self.rafale="no"
@@ -246,294 +247,13 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
                 self.rafale="yes"
                 self.rafaleNb=0
 
-            if Ennemi.shotsE != []:
-                for shoot in Ennemi.shotsE:
+            if GE.Ennemi.shotsE != []:
+                for shoot in GE.Ennemi.shotsE:
                     self.vie=shoot.updateE(self.canvaGame,self.vie,self.freamHeart1,self.freamHeart2,self.freamHeart3)
         if ennemi.bossvie!=0 and self.vie!=0 :
             self.canvaGame.after(16,lambda : self.gameLoop(player,ennemi,obstacl,speed,sens))
         elif self.vie==0:
             self.gameEnd()
-class Obstacle():
-    listeobstacle=[]
-    def __init__(self,root,x,y):
-        self.canva=root.canvaGame
-        self.root=root
-        self.x=x
-        self.y=y
-        for h in  range(3):
-            for i in range(6):
-                Pileobstacle=[]
-                for j in range(3):
-                    Pileobstacle.append(self.canva.create_rectangle (self.x,self.y,self.x+25,self.y-25,outline="gray",fill="green"))
-                    self.y-=25
-                self.x+=25
-                self.y=y
-                Obstacle.listeobstacle.append(Pileobstacle)
-            self.x=x+(h+1)*300
-            self.y=y
-            
-class Mobs():
-    item=[]
-    def __init__(self,root,x,y):
-        self.canva=root.canvaGame
-        self.x=x
-        self.y=y
-        Mobs.item.append(self.canva.create_image(x,y, image=self.imageEnemis))
-        self.canva.pack()
-        
-    
-class Ennemi():
-    shotsE=[]
-    def __init__(self,root,x,y,img1,img2,img3,img4,img5):
-        self.imgboss1=img4
-        self.imgboss2=img5
-        self.boss=0
-        self.bossvie=3
-        self.canva=root.canvaGame
-        self.root=root
-        self.x=x
-        self.y=y
-        self.listeEnnemies=[]
-
-        for i in range(6):
-            filleEnnemies=[]
-            filleEnnemies.append(self.canva.create_image(self.x,self.y, image=img1))
-            self.y-=100
-            filleEnnemies.append(self.canva.create_image(self.x,self.y, image=img2))
-            self.y-=100
-            filleEnnemies.append(self.canva.create_image(self.x,self.y, image=img3))
-
-            self.y=300
-            self.x+=100
-            self.listeEnnemies.append(filleEnnemies)
-
-    def tire(self,canva):
-
-        for i in range(len(self.listeEnnemies)):
-            if self.listeEnnemies[i]!=[]:
-                E=self.listeEnnemies[i][-1]
-                prob=random()
-                if prob<0.01:
-                    Ennemi.shotsE.append(TireE(canva,E))
-            
-    def move(self,canva,speed,sens):
-        r=0
-        m=0
-
-        for i in self.listeEnnemies:
-            for j in i :
-                if j!=0 and r==0:
-                    Eg=j
-                    r=1
-
-        for i in list(reversed(self.listeEnnemies)):
-            for j in i:
-                if j!=0 and m==0:
-                    Ed=j
-                    m=1
 
 
-        xd1,yd,xd2,yd=canva.bbox(Ed)
-        xg1,yg,xg2,yg=canva.bbox(Eg)
 
-        if xd2+speed>=900 and sens=="d":
-            for i in self.listeEnnemies:
-                for j in i:
-                    canva.move(j,0,10)
-            speed+=0.25
-            sens="g"
-            return sens,speed
-
-        if xg1-speed<=0 and sens=="g":
-            for i in self.listeEnnemies:
-                for j in i:
-                    canva.move(j,0,10)
-            speed+=0.25
-            sens="d"
-            return sens,speed
-
-        for i in self.listeEnnemies:
-            for j in i:
-                x1,y1,x2,y2=canva.bbox(j)
-                if x2+speed<900 and sens=="d":
-                    canva.move(j,speed,0)
-                elif x1-speed>0 and sens=="g":
-                    canva.move(j,-speed,0)
-
-        return sens,speed
-    
-    def Boss (self, boss, canva):
-        self.boss=canva.create_image(450,100, image=boss)
-
-    def BossMouv(self,canva,speed,sens):
-        x1,y1,x2,y2=canva.bbox(self.boss)
-
-        if x2+speed>=900 and sens=="d":
-            sens="g"
-            return sens,speed
-
-        if x1-speed<=0 and sens=="g":
-            sens="d"
-            return sens,speed
-
-        if x2+speed<900 and sens=="d":
-            canva.move(self.boss,speed,0)
-        elif x1-speed>0 and sens=="g":
-            canva.move(self.boss,-speed,0)
-
-        return sens,speed
-
-class Joueur(Mobs):
-    def vaRightRelease(self, event, canva):
-        self.vaRightBool=False
-    def vaRightPress(self, event, canva):
-        self.vaRightBool=True
-
-    def vaLeftRelease(self, event, canva):
-        self.vaLeftBool=False
-    def vaLeftPress(self, event, canva):
-        self.vaLeftBool=True
-
-    def vaRight(self, canva):
-        x1,y1,x2,y2=canva.bbox(Mobs.item[0])
-        if x2+10<900:
-            canva.move(Mobs.item[0],10,0)
-            self.x+=10
-
-    def vaLeft(self, canva):
-        x1,y1,x2,y2=canva.bbox(Mobs.item[0])
-        if x1-10>0:
-            canva.move(Mobs.item[0],-10,0)
-            self.x-=10
-            
-    def tir(self, event,canva,ennemi,scoreVar):
-        if self.shots ==[]:
-            self.shots.append(TirShot(canva,self,ennemi,scoreVar))   
-        
-    def __init__(self, canva, x, y):
-        self.vaRightBool=False
-        self.vaLeftBool=False
-
-        self.imageEnemis = tk.PhotoImage(file="images/joueur.gif")
-        self.imageHeight=84
-        self.imageWidth=110
-        self.shots=[]
-        super().__init__(canva,x,y)
-
-class TirShot():
-    def __init__(self,canva,person,ennemi,scorevar):
-        self.person=person
-        self.x=person.x
-        self.y=person.y
-        self.shot= canva.create_oval(person.x-5,person.y-10-person.imageHeight/2,person.x+5,person.y-person.imageHeight/2,fill='green')
-        self.update(canva,ennemi,scorevar)
-    
-    def update(self,canva,ennemi,scoreVar):
-            if self.y<=900 and self.y>=0:
-                self.y-=15
-                canva.move(self.shot,0,-15)
-                x1,y1,x2,y2=canva.bbox(self.shot)
-                a=canva.find_overlapping(x1,y1,x2,y2)
-                b=a[0]
-
-                if b!=self.shot and b in range(56,74):
-                    self.person.shots.pop()
-                    canva.delete(self.shot)
-                    k=0
-                    for i in ennemi.listeEnnemies:
-                        u=0
-                        for j in i:
-                            if j==b:
-                                if b in [58, 61, 64, 67, 70, 73]:
-                                    scoreVar+=300
-
-                                elif b in [57, 60, 63, 66, 69, 72]:
-                                    scoreVar+=200
-
-                                elif b in [56, 59, 62, 65, 68, 71]:
-                                    scoreVar+=100
-
-                                ennemi.listeEnnemies[k].pop(u)
-                                canva.delete(b)  
-                            else:
-                                u+=1
-                        k+=1
-
-                elif b==ennemi.boss and ennemi.bossvie==3:
-                    ennemi.bossvie-=1
-                    canva.delete(self.shot)
-                    self.person.shots.pop()
-                    x1,y1,x2,y2=canva.bbox(ennemi.boss)
-                    x=x1+(x2-x1)
-                    y=y1+(y2-y1)
-                    canva.delete(ennemi.boss)
-                    ennemi.boss=canva.create_image(x,100, image=ennemi.imgboss1)
-
-                elif b==ennemi.boss and ennemi.bossvie==2:
-                    ennemi.bossvie-=1
-                    canva.delete(self.shot)
-                    self.person.shots.pop()
-                    x1,y1,x2,y2=canva.bbox(ennemi.boss)
-                    x=(x2+x1)/2
-                    y=(y2+y1)/2
-                    canva.delete(ennemi.boss)
-                    ennemi.boss=canva.create_image(x,100, image=ennemi.imgboss2)
-
-                elif b==ennemi.boss and ennemi.bossvie==1:
-                    ennemi.bossvie-=1
-                    canva.delete(self.shot)
-                    self.person.shots.pop()
-                    scoreVar+=1000
-
-            else:
-                canva.delete(self.shot)
-                self.person.shots.pop()
-
-            return scoreVar
-
-
-class TireE():
-    def __init__(self,canva,entity):
-        self.shotE=0
-        self.entity=entity
-        self.x1,self.y1,self.x2,self.y2=canva.bbox(self.entity)
-        self.x=(self.x1+self.x2)/2
-        self.y=self.y1+60
-        self.shotE= canva.create_oval(self.x-5,self.y-5,self.x+5,self.y+5,fill='red')
-
-        
-        
-    def updateE(self,canva,vie,frame1,frame2,frame3):
-        
-        if self.y<=900 and self.y>=0 :
-            self.y+=15
-            canva.move(self.shotE,0,+15)
-            print(Ennemi.shotsE)
-            x1,y1,x2,y2=canva.bbox(self.shotE)
-            a=canva.find_overlapping(x1,y1,x2,y2)
-            b=a[0]
-            
-            if b!=self.shotE and b in range(55):
-                canva.delete(b)
-                
-                for shot in Ennemi.shotsE:
-                    if shot.shotE==self.shotE:
-                        Ennemi.shotsE.remove(shot)
-                
-                canva.delete(self.shotE)
-                Obstacle.listeobstacle[b//3-1].pop()
-                
-            if b==Mobs.item[0]:
-                print(vie)
-                if vie == 3:
-                    frame3.destroy()
-                if vie == 2:
-                    frame2.destroy()
-                if vie == 1:
-                    frame1.destroy()              
-                vie-=1
-                for shot in Ennemi.shotsE:
-                    if shot.shotE==self.shotE:
-                        Ennemi.shotsE.remove(shot)
-                canva.delete(self.shotE)
-        return vie     
