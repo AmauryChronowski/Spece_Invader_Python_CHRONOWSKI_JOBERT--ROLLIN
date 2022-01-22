@@ -79,17 +79,17 @@ class Ennemi():
         self.listeEnnemies=[]
 
         for i in range(6): #Crée les 6 colonnes d'ennemies
-            filleEnnemies=[] #Fille de colonnes d'ennemie
-            filleEnnemies.append(self.canva.create_image(self.x,self.y, image=img1))
+            fileEnnemies=[] #File de colonnes d'ennemie
+            fileEnnemies.append(self.canva.create_image(self.x,self.y, image=img1))
             self.y-=100
-            filleEnnemies.append(self.canva.create_image(self.x,self.y, image=img2))
+            fileEnnemies.append(self.canva.create_image(self.x,self.y, image=img2))
             self.y-=100
-            filleEnnemies.append(self.canva.create_image(self.x,self.y, image=img3))
+            fileEnnemies.append(self.canva.create_image(self.x,self.y, image=img3))
 
             self.y=300
             self.x+=100
-            self.listeEnnemies.append(filleEnnemies)
-
+            self.listeEnnemies.append(fileEnnemies)
+            
     def tire(self,canva):
     #Fait tirer des enemis aléatoirement
         
