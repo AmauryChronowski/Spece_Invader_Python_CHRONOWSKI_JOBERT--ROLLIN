@@ -194,14 +194,14 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
         obstacl=obstacle(self,75,700)
         player=joueur(self,450,830)
         ennemi=Ennemi(self,50,300, self.img1,self.img2,self.img3)
-        self.bindPlayer(player,ennemi,self.scorevar)
+        self.bindPlayer(player,ennemi,self.scoreVar)
         self.gameLoop(player,ennemi,obstacl,1,"d")
         print(player.imageEnemis)
 
     def gameLoop(self,player,ennemi,obstacl,speed,sens):
         if player.shots != []:
             for shoot in player.shots:
-                self.scorevar=shoot.update(self.canvaGame,ennemi,self.scorevar)
+                self.scoreVar=shoot.update(self.canvaGame,ennemi,self.scoreVar)
 
         
         if player.vaRightBool ==True:
@@ -219,7 +219,7 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
             if Ennemi.shotsE != []:
                 for shoot in Ennemi.shotsE:
                     shoot.updateE(self.canvaGame)
-            self.scorestr.set(str(self.scorevar))
+            self.scorestr.set(str(self.scoreVar))
             
         elif ennemi.boss==0 and ennemi.listeEnnemies==[]:
             speed=10
