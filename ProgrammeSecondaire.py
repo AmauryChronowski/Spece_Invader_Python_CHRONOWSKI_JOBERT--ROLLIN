@@ -2,17 +2,11 @@
 # Header
 
 """
-
 Programme secondaire Sapce Invader
-
 Que fait ce programme : Comptient les différentes fonctions pour réaliser le Space Invader
-
 Qui l'a fait : Amaury CHRONOWSKI / Gabin JOBERT--ROLLIN
-
 Quand a-t-il été réalisé : 15/11/2021 -22/01/2022
-
 Que reste-t-il à faire :
-
 """
 
 #Importation de bibliothèques nécessaires
@@ -98,25 +92,25 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
         self.heartimg = tk.PhotoImage(file = 'images/heart.gif')
         
         #Frame pour chaque coeur en prévision de leur supréssions une par une
-        self.FreamHeart1 = tk.Frame(self.freamHeartContain, bg = "black")
-        self.FreamHeart1.pack(side = 'left')
+        self.freamHeart1 = tk.Frame(self.freamHeartContain, bg = "black")
+        self.freamHeart1.pack(side = 'left')
 
-        self.FreamHeart2 = tk.Frame(self.freamHeartContain, bg = "black")
-        self.FreamHeart2.pack(side = 'left')
+        self.freamHeart2 = tk.Frame(self.freamHeartContain, bg = "black")
+        self.freamHeart2.pack(side = 'left')
 
-        self.FreamHeart3 = tk.Frame(self.freamHeartContain, bg = "black")
-        self.FreamHeart3.pack(side = 'right')
+        self.freamHeart3 = tk.Frame(self.freamHeartContain, bg = "black")
+        self.freamHeart3.pack(side = 'right')
         
         #Inssertion des image du coeur dans les frames
-        self.Heart1 = tk.Canvas(self.FreamHeart1, height = 180, width = 180, bg = "black", highlightthickness = 0)
+        self.Heart1 = tk.Canvas(self.freamHeart1, height = 180, width = 180, bg = "black", highlightthickness = 0)
         self.Heart1.create_image(0, 0, anchor = 'nw', image = self.heartimg)
         self.Heart1.pack(side = "left")
         
-        self.Heart2 = tk.Canvas(self.FreamHeart2, height = 180, width = 180, bg = "black", highlightthickness = 0)
+        self.Heart2 = tk.Canvas(self.freamHeart2, height = 180, width = 180, bg = "black", highlightthickness = 0)
         self.Heart2.create_image(0, 0, anchor = 'nw', image = self.heartimg)
         self.Heart2.pack(side = "top")
         
-        self.Heart3 = tk.Canvas(self.FreamHeart3, height = 180, width = 180, bg = "black", highlightthickness = 0)
+        self.Heart3 = tk.Canvas(self.freamHeart3, height = 180, width = 180, bg = "black", highlightthickness = 0)
         self.Heart3.create_image(0, 0, anchor = 'nw', image = self.heartimg)
         self.Heart3.pack(side = "right")
         
@@ -189,15 +183,14 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
 
         self.frameGame.pack(fill = "both", expand = "yes")
 
-    def gameStart(self):
-        obstacl=obstacle(self,75,700)
-        player=joueur(self,450,830)
-        ennemi=Ennemi(self,50,300, self.img1,self.img2,self.img3)
-        self.bindPlayer(player,ennemi,self.scorevar)
-        self.gameLoop(player,ennemi,1,"d")
-        print(player.imageEnemis)
-
     def gameLoop(self,player,ennemi,obstacl,speed,sens):
+
+        if ennemi.bossvie==0:
+            self.gameEnd()
+        elif self.vie==0:
+            self.gameEnd()
+        
+
         if player.shots != []:
             for shoot in player.shots:
                 self.scoreVar=shoot.update(self.canvaGame,ennemi,self.scoreVar)
@@ -215,31 +208,28 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
         if  ennemi.listeEnnemies!=[]:
             sens,speed=ennemi.move(self.canvaGame,speed,sens)
             ennemi.tire(self.canvaGame)
-            if ennemi.shotsE != []:
-                for shoot in ennemi.shotsE:
-                    shoot.updateE(self.canvaGame)
+            if Ennemi.shotsE != []:
+                for shoot in Ennemi.shotsE:
+                    self.vie=shoot.updateE(self.canvaGame,self.vie,self.freamHeart1,self.freamHeart2,self.freamHeart3)
             self.scoreStr.set(str(self.scoreVar))
 
         elif ennemi.boss==0 and ennemi.listeEnnemies==[]:
             speed=10
             ennemi.Boss(self.img4,self.canvaGame)
-            if ennemi.shotsE != []:
-                for shoot in ennemi.shotsE:
-                    shoot.updateE(self.canvaGame)
-
-        
-        elif ennemi.bossvie==0:
-            self.gameEnd()
+            if Ennemi.shotsE != []:
+                for shoot in Ennemi.shotsE:
+                    self.vie=shoot.updateE(self.canvaGame,self.vie,self.freamHeart1,self.freamHeart2,self.freamHeart3)
+ 
 
         else:
-            if ennemi.shotsE != []:
-                for shoot in ennemi.shotsE:
-                    shoot.updateE(self.canvaGame)
+            if Ennemi.shotsE != []:
+                for shoot in Ennemi.shotsE:
+                    self.vie=shoot.updateE(self.canvaGame,self.vie,self.freamHeart1,self.freamHeart2,self.freamHeart3)
             sens,speed=ennemi.BossMouv(self.canvaGame,speed,sens)
 
             if self.rafaleNb<=40 and self.rafale=="yes":
                 self.rafaleNb+=1              
-                ennemi.shotsE.append(TireE(self.canvaGame,ennemi.boss))
+                Ennemi.shotsE.append(TireE(self.canvaGame,ennemi.boss))
 
             elif self.rafaleNb>40 and self.rafale=="yes":
                 self.rafale="no"
@@ -252,12 +242,13 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
                 self.rafale="yes"
                 self.rafaleNb=0
 
-            if ennemi.shotsE != []:
-                for shoot in ennemi.shotsE:
-                    shoot.updateE(self.canvaGame)
-        if ennemi.bossvie!=0:
+            if Ennemi.shotsE != []:
+                for shoot in Ennemi.shotsE:
+                    self.vie=shoot.updateE(self.canvaGame,self.vie,self.freamHeart1,self.freamHeart2,self.freamHeart3)
+        if ennemi.bossvie!=0 and self.vie!=0 :
             self.canvaGame.after(16,lambda : self.gameLoop(player,ennemi,obstacl,speed,sens))
-
+        elif self.vie==0:
+            self.gameEnd()
 class Obstacle():
     listeobstacle=[]
     def __init__(self,root,x,y):
@@ -273,7 +264,7 @@ class Obstacle():
                     self.y-=25
                 self.x+=25
                 self.y=y
-                obstacle.listeobstacle.append(Pileobstacle)
+                Obstacle.listeobstacle.append(Pileobstacle)
             self.x=x+(h+1)*300
             self.y=y
             
@@ -318,7 +309,7 @@ class Ennemi():
             if self.listeEnnemies[i]!=[]:
                 E=self.listeEnnemies[i][-1]
                 prob=random()
-                if prob<0.1:
+                if prob<0.01:
                     Ennemi.shotsE.append(TireE(canva,E))
             
     def move(self,canva,speed,sens):
@@ -499,19 +490,20 @@ class TirShot():
 
 class TireE():
     def __init__(self,canva,entity):
+        self.shotE=0
         self.entity=entity
         self.x1,self.y1,self.x2,self.y2=canva.bbox(self.entity)
         self.x=(self.x1+self.x2)/2
         self.y=self.y1+60
         self.shotE= canva.create_oval(self.x-5,self.y-5,self.x+5,self.y+5,fill='red')
+
         
         
-    def updateE(self,canva):
+    def updateE(self,canva,vie,frame1,frame2,frame3):
         
         if self.y<=900 and self.y>=0 :
             self.y+=15
-            
-            canva.move(self.shotE,0,+15)  
+            canva.move(self.shotE,0,+15)
             x1,y1,x2,y2=canva.bbox(self.shotE)
             a=canva.find_overlapping(x1,y1,x2,y2)
             b=a[0]
@@ -527,12 +519,16 @@ class TireE():
                 Obstacle.listeobstacle[b//3-1].pop()
                 
             if b==Mobs.item[0]:
-                print('joueur touché')
+                print(vie)
+                if vie == 3:
+                    frame3.destroy()
+                if vie == 2:
+                    frame2.destroy()
+                if vie == 1:
+                    frame1.destroy()              
+                vie-=1
                 for shot in Ennemi.shotsE:
                     if shot.shotE==self.shotE:
                         Ennemi.shotsE.remove(shot)
-                        
                 canva.delete(self.shotE)
-            
-            
-        
+        return vie     
