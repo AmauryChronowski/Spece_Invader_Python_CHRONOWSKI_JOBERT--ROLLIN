@@ -135,23 +135,23 @@ class SpaceInvader(tk.Frame):
         if  ennemi.listeEnnemies!=[]:
             sens,speed=ennemi.move(self.canvaGame,speed,sens)
             ennemi.tire(self.canvaGame)
-            if ennemi.shotsE != []:
-                for shoot in ennemi.shotsE:
-                    shoot.updateE(self.canvaGame,ennemi)
+            if Ennemi.shotsE != []:
+                for shoot in Ennemi.shotsE:
+                    shoot.updateE(self.canvaGame)
             self.scorestr.set(str(self.scorevar))
             
 
         elif ennemi.boss==0 and ennemi.listeEnnemies==[]:
             ennemi.Boss(self.img4,self.canvaGame)
-            if ennemi.shotsE != []:
-                for shoot in ennemi.shotsE:
-                    shoot.updateE(self.canvaGame,ennemi)
+            if Ennemi.shotsE != []:
+                for shoot in Ennemi.shotsE:
+                    shoot.updateE(self.canvaGame)
             
             
         else:
-            if ennemi.shotsE != []:
-                for shoot in ennemi.shotsE:
-                    shoot.updateE(self.canvaGame,ennemi)
+            if Ennemi.shotsE != []:
+                for shoot in Ennemi.shotsE:
+                    shoot.updateE(self.canvaGame)
         self.canvaGame.after(16,lambda : self.gameLoop(player,ennemi,obstacl,speed,sens))
 class obstacle():
     listeobstacle=[]
@@ -183,10 +183,12 @@ class mobs():
         
     
 class Ennemi():
+    
+    shotsE=[]
     def __init__(self,root,x,y,img1,img2,img3):
         self.boss=0
         self.canva=root.canvaGame
-        self.shotsE=[]
+        #self.shotsE=[]
         self.root=root
         self.x=x
         self.y=y
@@ -201,6 +203,7 @@ class Ennemi():
             self.y=300
             self.x+=100
             self.listeEnnemies.append(filleEnnemies)
+            
 
     def tire(self,canva):
 
@@ -209,7 +212,8 @@ class Ennemi():
                 E=self.listeEnnemies[i][-1]
                 prob=random()
                 if prob<0.1:
-                    self.shotsE.append(tireE(canva,E))
+                    Ennemi.shotsE.append(tireE(canva,E))
+
             
     def move(self,canva,speed,sens):
         r=0
@@ -347,7 +351,7 @@ class tireE():
         self.shotE= canva.create_oval(self.x-5,self.y-5,self.x+5,self.y+5,fill='red')
         
         
-    def updateE(self,canva,enemie):
+    def updateE(self,canva):
         
         if self.y<=900 and self.y>=0 :
             self.y+=15
@@ -356,25 +360,24 @@ class tireE():
             x1,y1,x2,y2=canva.bbox(self.shotE)
             a=canva.find_overlapping(x1,y1,x2,y2)
             b=a[0]
-            #print(obstacl.listeobstacle)
+            
             if b!=self.shotE and b in range(55):
                 canva.delete(b)
                 
-                for shot in enemie.shotsE:
+                for shot in Ennemi.shotsE:
                     if shot.shotE==self.shotE:
-                        enemie.shotsE.remove(shot)
+                        Ennemi.shotsE.remove(shot)
                 
                 canva.delete(self.shotE)
                 obstacle.listeobstacle[b//3-1].pop()
                 
             if b==mobs.item[0]:
                 print('joueur touché')
-                for shot in enemie.shotsE:
+                for shot in Ennemi.shotsE:
                     if shot.shotE==self.shotE:
-                        enemie.shotsE.remove(shot)
+                        Ennemi.shotsE.remove(shot)
                         
                 canva.delete(self.shotE)
             
             
-        #else:
-            #canva.delete(self.shotE)
+        
