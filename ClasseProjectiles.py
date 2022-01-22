@@ -1,8 +1,22 @@
-import MetaGame as SpInv
+"""
+Programme secondaire Space Invader
+Comptient les classes de Tir du joueur et des ennemis:
+    - TirAllie
+    - TirEnnemi
+(Les Projectiles)
+
+
+Créateurs : Amaury CHRONOWSKI / Gabin JOBERT--ROLLIN
+Date de réalisation: 15/11/2021 - 22/01/2022
+"""
+#bibliothèques personelles
 import GameElements as GE
 
-class TirShot():
+class TirAllie():
+#Classe pour s'occuper du tir du joueur
+
     def __init__(self,canva,person,ennemi,scorevar):
+    #Crée un tir
         self.person=person
         self.x=person.x
         self.y=person.y
@@ -10,6 +24,7 @@ class TirShot():
         self.update(canva,ennemi,scorevar)
     
     def update(self,canva,ennemi,scoreVar):
+    #Actualise la position du projectile
             if self.y<=900 and self.y>=0:
                 self.y-=15
                 canva.move(self.shot,0,-15)
@@ -73,8 +88,10 @@ class TirShot():
             return scoreVar
 
 
-class TireE():
+class TirEnnemi():
+
     def __init__(self,canva,entity):
+    #Crée un tir
         self.shotE=0
         self.entity=entity
         self.x1,self.y1,self.x2,self.y2=canva.bbox(self.entity)
@@ -85,7 +102,7 @@ class TireE():
         
         
     def updateE(self,canva,vie,frame1,frame2,frame3):
-        
+    #Actualise la position des projectiles ennemi   
         if self.y<=900 and self.y>=0 :
             self.y+=15
             canva.move(self.shotE,0,+15)
@@ -93,7 +110,7 @@ class TireE():
             a=canva.find_overlapping(x1,y1,x2,y2)
             b=a[0]
             
-            if b!=self.shotE and b in range(55):
+            if b!=self.shotE and b in range(55):    #détruit une brique d'obstacle si elle est touchée
                 canva.delete(b)
                 
                 for shot in GE.Ennemi.shotsE:
@@ -103,7 +120,7 @@ class TireE():
                 canva.delete(self.shotE)
                 GE.Obstacle.listeobstacle[b//3-1].pop()
                 
-            if b==GE.Joueur.theJoueur[0]:
+            if b==GE.Joueur.theJoueur[0]:   #si le joueur est touché enlève une vie au compteur
                 if vie == 3:
                     frame3.destroy()
                 if vie == 2:

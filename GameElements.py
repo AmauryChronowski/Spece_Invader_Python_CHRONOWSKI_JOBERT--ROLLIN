@@ -1,14 +1,28 @@
+"""
+Programme secondaire du projet SpaceInvader
+Contient les Classes : 
+    - Obstacle (défense du joueur)
+    - Ennemi
+    - Joueur 
+(tous les éléments de jeu hors tir)
 
+Créateurs : Amaury CHRONOWSKI / Gabin JOBERT--ROLLIN
+Date de réalisation: 15/11/2021 - 22/01/2022
+"""
 
+#bibliothèques standards
 from random import random
 import tkinter as tk
+
+#bibliothèques personelles
 import ClasseProjectiles as CP
 
 
 
 
 class Obstacle():
-    listeobstacle=[]
+#Permet de générer 3 bloc de briques
+    listeobstacle=[]    #tableau de la classe Obstacle (et non à un de ses objets) contenants toutes les briques
     def __init__(self,root,x,y):
         self.canva=root.canvaGame
         self.root=root
@@ -31,8 +45,9 @@ class Obstacle():
 
 
 class Ennemi():
-    shotsE=[]
-    def __init__(self,root,x,y,img1,img2,img3,img4,img5):
+#Permet de s'occuper des ennemis 
+    shotsE=[]   #tableau de la classe Ennemi (et non à un de ses objets) contenants tous les ennemis
+    def __init__(self,root,x,y,img1,img2,img3,img4,img5): #génère 3 lignes de 6 ennemis
         self.imgboss1=img4
         self.imgboss2=img5
         self.boss=0
@@ -56,15 +71,16 @@ class Ennemi():
             self.listeEnnemies.append(filleEnnemies)
 
     def tire(self,canva):
-
+    #fait tirer des enemis aléatoirement
         for i in range(len(self.listeEnnemies)):
             if self.listeEnnemies[i]!=[]:
                 E=self.listeEnnemies[i][-1]
                 prob=random()
                 if prob<0.01:
-                    Ennemi.shotsE.append(CP.TireE(canva,E))
+                    Ennemi.shotsE.append(CP.TirEnnemi(canva,E))
             
     def move(self,canva,speed,sens):
+    
         r=0
         m=0
 
@@ -111,6 +127,7 @@ class Ennemi():
         return sens,speed
     
     def Boss (self, boss, canva):
+    #fait apparaitre le boss
         self.boss=canva.create_image(450,100, image=boss)
 
     def BossMouv(self,canva,speed,sens):
@@ -136,33 +153,8 @@ class Ennemi():
 
 
 class Joueur():
-    theJoueur=[]
-    def vaRightRelease(self, event, canva):
-        self.vaRightBool=False
-    def vaRightPress(self, event, canva):
-        self.vaRightBool=True
-
-    def vaLeftRelease(self, event, canva):
-        self.vaLeftBool=False
-    def vaLeftPress(self, event, canva):
-        self.vaLeftBool=True
-
-    def vaRight(self, canva):
-        x1,y1,x2,y2=canva.bbox(Joueur.theJoueur[0])
-        if x2+10<900:
-            canva.move(Joueur.theJoueur[0],10,0)
-            self.x+=10
-
-    def vaLeft(self, canva):
-        x1,y1,x2,y2=canva.bbox(Joueur.theJoueur[0])
-        if x1-10>0:
-            canva.move(Joueur.theJoueur[0],-10,0)
-            self.x-=10
-            
-    def tir(self, event,canva,ennemi,scoreVar):
-        if self.shots ==[]:
-            self.shots.append(CP.TirShot(canva,self,ennemi,scoreVar))   
-        
+#Permet de s'occuper du vaisseau du joueur
+    theJoueur=[]    #tableau qui contiendra le vaisceau du joueur
     def __init__(self, root, x, y):
         self.vaRightBool=False
         self.vaLeftBool=False
@@ -178,4 +170,36 @@ class Joueur():
         Joueur.theJoueur.append(self.canva.create_image(x,y, image=self.imageEnemis))
         self.canva.pack()
 
-        #super().__init__(canva,x,y)
+        
+
+
+    def vaRightRelease(self, event, canva): #Fonction rattachées au touches du claviers par bindPlayer (module méta), permet de savoir quelle direction le joueur essaye d'aller
+        self.vaRightBool=False
+    def vaRightPress(self, event, canva):
+        self.vaRightBool=True
+    def vaLeftRelease(self, event, canva):
+        self.vaLeftBool=False
+    def vaLeftPress(self, event, canva):
+        self.vaLeftBool=True
+
+    def vaRight(self, canva):
+    #déplace le joueur vers la droite
+        x1,y1,x2,y2=canva.bbox(Joueur.theJoueur[0])
+        if x2+10<900:
+            canva.move(Joueur.theJoueur[0],10,0)
+            self.x+=10
+
+    def vaLeft(self, canva):
+    #déplace le joueur vers la 
+        x1,y1,x2,y2=canva.bbox(Joueur.theJoueur[0])
+        if x1-10>0:
+            canva.move(Joueur.theJoueur[0],-10,0)
+            self.x-=10
+            
+    def tir(self, event,canva,ennemi,scoreVar):
+    #tir un projectile
+        if self.shots ==[]:
+            self.shots.append(CP.TirAllie(canva,self,ennemi,scoreVar))   
+        
+    
+        

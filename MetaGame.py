@@ -1,21 +1,27 @@
-# -*- coding: utf-8 -*-
-# Header
+"""
+Programme secondaire Space Invader
+Comptient une unique classe qui permet de :
+    - Attacher les touches du clavier à l'affichage
+    - Lancer une parte, rejouer, quitter etc...
+    - La boucle infinie du jeu 
+(Tous ce qui ne font pas parti du gameplay)
+
+Créateurs : Amaury CHRONOWSKI / Gabin JOBERT--ROLLIN
+Date de réalisation: 15/11/2021 - 22/01/2022
 
 """
-Programme secondaire Sapce Invader
-Que fait ce programme : Comptient les différentes fonctions pour réaliser le Space Invader
-Qui l'a fait : Amaury CHRONOWSKI / Gabin JOBERT--ROLLIN
-Quand a-t-il été réalisé : 15/11/2021 -22/01/2022
-Que reste-t-il à faire :
-"""
 
-#Importation de bibliothèques nécessaires
+#bibliothèques standards
 import tkinter as tk
 from random import random
+
+#bibliothèques personelles
 import ClasseProjectiles as CP
 import GameElements as GE
-#Fonctions utilisées dans le programme principal
-class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
+
+
+class Meta(tk.Frame): 
+#Classe de la fenêtre de jeu
     def __init__(self,root, img1,img2,img3,img4,img5,img6): #initialisation de la fenêtre de jeu | Reçoit : les images des ennemies
 
         super().__init__(root)
@@ -50,7 +56,8 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
         
         self.menu.pack(fill = "both",expand = "yes") 
 
-    def bindPlayer(self,player,ennemi,scoreVar): #Fonctions atribuant des action à des touches du clavier | Reçoit : l'objet joueur, l'objet ennemie et le score du joueur | Lance : les fonction de déplacement du personnage (qui prennent les actions de touche du clavier) et la fonction de tir du personnage (qui pend les action du clavier, l'objet ennemie et le score du joueur)
+    def bindPlayer(self,player,ennemi,scoreVar):
+    #Fonctions atribuant des action à des touches du clavier | Reçoit : l'objet joueur, l'objet ennemie et le score du joueur | Lance : les fonction de déplacement du personnage (qui prennent les actions de touche du clavier) et la fonction de tir du personnage (qui pend les action du clavier, l'objet ennemie et le score du joueur)
         self.root.bind("<KeyRelease-z>", lambda event, e = self.canvaGame: player.vaUpRelease(event, e))
         self.root.bind("<KeyPress-z>", lambda event, e = self.canvaGame: player.vaUpPress(event, e))
         self.root.bind("<KeyRelease-s>", lambda event, e = self.canvaGame: player.vaDownRelease(event, e))
@@ -61,7 +68,8 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
         self.root.bind("<KeyPress-d>", lambda event, e = self.canvaGame: player.vaRightPress(event, e))
         self.root.bind("<space>", lambda event, e = self.canvaGame: player.tir(event, e, ennemi, scoreVar))     
             
-    def startPartie(self): #Fonction qui lance une partie 
+    def startPartie(self):
+    #Fonction qui lance une partie 
 
         #Déstruction de la frame du menu
         self.menu.destroy()
@@ -135,7 +143,8 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
         #Fonction qui enclanche la partie
         self.gameStart() 
         
-    def rejouer(self): #Fonction pour rejouer une partie
+    def rejouer(self):
+    #Fonction pour rejouer une partie
 
         #Détruit la frame de jeu
         self.frameGame.destroy()
@@ -147,7 +156,10 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
         #Fonction qui lance une partie
         self.startPartie()
         arestart=True
-    def gameStart(self): #Fonction qui enclanche la partie | Lance : Fonction qui associe les touches du clavier à des actions et la fonction qui rafréchit en continue du jeu
+
+
+    def gameStart(self):
+    #Fonction qui enclanche la partie | Lance : Fonction qui associe les touches du clavier à des actions et la fonction qui rafréchit en continue du jeu
         
         #Objet utilisés dans les fonctions
         obstacl=GE.Obstacle(self,75,700) #Obstacles protégant le joueur
@@ -157,7 +169,9 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
         self.bindPlayer(player,ennemi,self.scoreVar) #Fonction qui associe les touches du clavier à des actions
         self.gameLoop(player,ennemi,obstacl,1,"d") #Fonction qui rafréchit en continue du jeu
 
-    def gameEnd(self): #Fonction de fin de partie
+
+    def gameEnd(self):
+    #Fonction de fin de partie
 
         #Déstruction de la frame de jeu 
         self.frameGame.destroy()
@@ -188,29 +202,29 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
 
         self.frameGame.pack(fill = "both", expand = "yes")
 
-    def gameLoop(self,player,ennemi,obstacl,speed,sens):
 
+    def gameLoop(self,player,ennemi,obstacl,speed,sens):
+    #fonction réappelée toutes les 16ms (role de la boucle infinie), lance des évènements si les conditions sont remplie et actualise des objets  
         if ennemi.bossvie==0:
             self.gameEnd()
         elif self.vie==0:
             self.gameEnd()
         
-
-        if player.shots != []:
+        if player.shots != []:  #actualise le tir du joueur
             for shoot in player.shots:
                 self.scoreVar=shoot.update(self.canvaGame,ennemi,self.scoreVar)
 
-        if player.vaRightBool ==True:
+        if player.vaRightBool ==True:   #déplace le joueur 
             player.vaRight(self.canvaGame)
         if player.vaLeftBool ==True:
             player.vaLeft(self.canvaGame)
 
-        for i in ennemi.listeEnnemies:
+        for i in ennemi.listeEnnemies:  #si une ligne d'énnemi est entièrement morte accélère la descente
             if i==[]:
                 ennemi.listeEnnemies.pop( ennemi.listeEnnemies.index(i))
                 speed+=0.5
 
-        if  ennemi.listeEnnemies!=[]:
+        if  ennemi.listeEnnemies!=[]:   #actualise les tirs des énnemis
             sens,speed=ennemi.move(self.canvaGame,speed,sens)
             ennemi.tire(self.canvaGame)
             if GE.Ennemi.shotsE != []:
@@ -218,14 +232,13 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
                     self.vie=shoot.updateE(self.canvaGame,self.vie,self.freamHeart1,self.freamHeart2,self.freamHeart3)
             self.scoreStr.set(str(self.scoreVar))
 
-        elif ennemi.boss==0 and ennemi.listeEnnemies==[]:
+        elif ennemi.boss==0 and ennemi.listeEnnemies==[]:   #fait apparaitre le boss si les énnemis sont morts
             speed=10
             ennemi.Boss(self.img4,self.canvaGame)
             if GE.Ennemi.shotsE != []:
                 for shoot in GE.Ennemi.shotsE:
                     self.vie=shoot.updateE(self.canvaGame,self.vie,self.freamHeart1,self.freamHeart2,self.freamHeart3)
  
-
         else:
             if GE.Ennemi.shotsE != []:
                 for shoot in GE.Ennemi.shotsE:
@@ -234,7 +247,7 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
 
             if self.rafaleNb<=40 and self.rafale=="yes":
                 self.rafaleNb+=1              
-                GE.Ennemi.shotsE.append(CP.TireE(self.canvaGame,ennemi.boss))
+                GE.Ennemi.shotsE.append(CP.TirEnnemi(self.canvaGame,ennemi.boss))
 
             elif self.rafaleNb>40 and self.rafale=="yes":
                 self.rafale="no"
@@ -252,6 +265,7 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
                     self.vie=shoot.updateE(self.canvaGame,self.vie,self.freamHeart1,self.freamHeart2,self.freamHeart3)
         if ennemi.bossvie!=0 and self.vie!=0 :
             self.canvaGame.after(16,lambda : self.gameLoop(player,ennemi,obstacl,speed,sens))
+
         elif self.vie==0:
             self.gameEnd()
 

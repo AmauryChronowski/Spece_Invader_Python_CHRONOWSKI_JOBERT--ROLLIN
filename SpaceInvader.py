@@ -1,26 +1,22 @@
-# -*- coding: utf-8 -*-
-# Header
-
 """
-
 Programme principale Space Invader
-
 Que fait ce programme : Réalise le lancement du Space Invader
 
-Qui l'a fait : Amaury CHRONOWSKI / Gabin JOBERT--ROLLIN
 
-Quand a-t-il été réalisé : 15/11/2021 - 22/01/2022
 
-Que reste-t-il à faire : 
 
+
+Créateurs : Amaury CHRONOWSKI / Gabin JOBERT--ROLLIN
+Date de réalisation: 15/11/2021 - 22/01/2022
 """
 
-#Importation de bibliothèques nécessaires
-from MetaGame import SpaceInvader
-
+#bibliothèques standards
 import tkinter as tk
 
-#Programme principal
+#bibliothèques personelles
+from MetaGame import Meta
+
+
 if __name__ == "__main__":
 
     #Création de la fenêtre
@@ -36,5 +32,5 @@ if __name__ == "__main__":
     img5 = tk.PhotoImage(file="images/Boss1.png")
     img6 = tk.PhotoImage(file="images/Boss2.png")
     
-    game = SpaceInvader(root,img1,img2,img3,img4,img5,img6) #Intancie la fenêtre de jeu | Entrées : les images des diffrentens ennemies, la fenêtre | Sorties : le jeu
+    game = Meta(root,img1,img2,img3,img4,img5,img6) #Intancie la fenêtre de jeu | Entrées : les images des diffrentens ennemies, la fenêtre | Sorties : le jeu
     game.mainloop() #Lance le jeu
