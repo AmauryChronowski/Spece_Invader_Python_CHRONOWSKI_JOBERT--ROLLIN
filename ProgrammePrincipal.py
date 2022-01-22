@@ -5,7 +5,7 @@
 """
 Programme principale Sapce Invader
 
-Amaury CHRONOWSKI/Gabin JOBERT--ROLLINz
+Amaury CHRONOWSKI/Gabin JOBERT--ROLLIN
 
 15/11/2021
 

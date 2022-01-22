@@ -13,6 +13,7 @@ Réalise le lancement du Space Invader
 from os import spawnl
 import tkinter as tk
 from time import time
+from tkinter.constants import X
 
 
 class SpaceInvader(tk.Frame):
@@ -123,15 +124,13 @@ class SpaceInvader(tk.Frame):
     """
     def gameStart(self):
 
-        obstacl=obstacle(self,100,700)
-        enemei=enemis1(self,350,330)
+        obstacl=obstacle(self,75,700)
         player=joueur(self,450,830)
-        
-        print('3')
-        print('1')   
-        print('2')
-        enemei2=enemis1(self,250,330)
-        print('4')
+        ennemi=Ennemi(self,50,300)
+
+        """        
+        enemei=enemis1(self,350,330)
+        enemei2=enemis1(self,250,330)"""
         self.bindPlayer(player)
         self.gameLoop(player)
 
@@ -147,6 +146,7 @@ class SpaceInvader(tk.Frame):
             player.vaRight(self.canvaGame)
         if player.vaLeftBool ==True:
             player.vaLeft(self.canvaGame)
+        
         self.canvaGame.after(16,lambda : self.gameLoop(player))
         
 
@@ -159,16 +159,17 @@ class obstacle():
         self.listeobstacle=[]
         for h in  range(3):
             for i in range(6):
-
+                Pileobstacle=[]
                 for j in range(3):
-                    listehaut=[]
-                    listehaut.append(self.canva.create_rectangle (self.x,self.y,self.x+25,self.y-25,outline="gray",fill="green"))
+                    Pileobstacle.append(self.canva.create_rectangle (self.x,self.y,self.x+25,self.y-25,outline="gray",fill="green"))
                     self.y-=25
                 self.x+=25
                 self.y=y
-                self.listeobstacle.append(listehaut)
-            self.x=x+300
+                self.listeobstacle.append(Pileobstacle)
+            self.x=x+(h+1)*300
             self.y=y
+
+
 
 
 class mobs():
@@ -182,13 +183,48 @@ class mobs():
         except Exception:
             print("liste pas encore crée") 
             self.item=[self.canva.create_image(x,y, image=self.imageEnemis)] """
-        a=self.canva.create_image(self.x,self.y,anchor = "nw",image=self.imageEnemis)
+        a=self.canva.create_image(self.x,self.y,image=self.imageEnemis)
         mobs.item.append(a)
         #root.canvaGame.create_image(x,y, image=self.imageEnemis)
-        self.canva.pack() 
+        self.canva.pack()
+        print(mobs.item)
         
     
+class Ennemi():
+    listeEnnemies=[]
+    def __init__(self,root,x,y):
+        
+        self.canva=root.canvaGame
+        self.root=root
+        self.x=x
+        self.y=y
+        self.listeEnnemies=[]
+        for i in range(6):
+            filleEnnemies=[]
+            imageEnemis = tk.PhotoImage(file="images/enemi1.gif")
+            """img=self.canva.create_image(self.x,self.y, image=imageEnemis)"""
+            filleEnnemies.append(self.canva.create_rectangle (self.x,self.y,self.x+25,self.y-25,outline="gray",fill="green"))
+            """filleEnnemies.append(img)"""
+            self.y-=100
+            imageEnemis = tk.PhotoImage(file="images/enemi2.gif")
+            """img=self.canva.create_image(self.x,self.y, image=imageEnemis)"""
+            filleEnnemies.append(self.canva.create_rectangle (self.x,self.y,self.x+25,self.y-25,outline="gray",fill="red"))
+            """filleEnnemies.append(img)"""
+            self.y-=100
+            imageEnemis = tk.PhotoImage(file="images/enemi2.gif")
+            """img=self.canva.create_image(self.x,self.y, image=imageEnemis)"""
+            filleEnnemies.append(self.canva.create_rectangle (self.x,self.y,self.x+25,self.y-25,outline="gray",fill="white"))
+            """filleEnnemies.append(img)"""
+            self.y=300
+            self.x+=100
+            Ennemi.listeEnnemies.append(filleEnnemies)
+        print(self.listeEnnemies)
 
+    
+
+
+
+"""
 class enemis1(mobs):
     def __init__(self, canva, x, y):
         
@@ -207,7 +243,7 @@ class enemis3(mobs):
     def __init__(self, canva, x, y):
         self.imageEnemis = tk.PhotoImage(file="images/enemi3.gif")
         super().__init__(canva,x,y)
-
+"""
 class joueur(mobs):
     """ def vaUpRelease(self, event, canva):
         self.vaUpBool=False
@@ -276,6 +312,7 @@ class tirShot():
         self.person=person
         self.x=person.x
         self.y=person.y
+        
         self.shot= canva.create_oval(person.x-10,person.y-20-person.imageHeight/2,person.x+10,person.y-person.imageHeight/2,fill='green')
         self.update(canva)
     
@@ -284,6 +321,24 @@ class tirShot():
         if self.y<=900 and self.y>=0:
             self.y-=15
             canva.move(self.shot,0,-15)
+            
+            for PremierEnemi in Ennemi.listeEnnemies:
+                cor=canva.bbox(PremierEnemi[0])
+                if cor == None:
+                    break
+                
+                if self.y<cor[3]:
+                    print('cool', cor[0])
+                    if ((self.x>cor[0] and self.x<cor[2] ) or (self.x+20>cor[0] and self.x+20 <cor[2])):
+                        print("aaa")
+                        canva.delete(PremierEnemi[0])
+                        canva.delete(self.shot)
+                        
+                    
+                    break 
+                print(cor)
+                print(self.y)
+            canva.pack()
             #canva.after(16,lambda : self.update(canva))
         else:
             canva.delete(self.shot)
