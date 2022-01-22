@@ -151,7 +151,7 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
     def gameStart(self): #Fonction qui enclanche la partie | Lance : Fonction qui associe les touches du clavier à des actions et la fonction qui rafréchit en continue du jeu
         
         #Objet utilisés dans les fonctions
-        obstacl=obstacle(self,75,700) #Obstacles protégant le joueur
+        obstacl=Obstacle(self,75,700) #Obstacles protégant le joueur
         player=Joueur(self,450,830) #Elément joeur
         ennemi=Ennemi(self,50,300, self.img1,self.img2,self.img3,self.img5,self.img6) #Différents ennemies utilisés
 
@@ -258,7 +258,7 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
         if ennemi.bossvie!=0:
             self.canvaGame.after(16,lambda : self.gameLoop(player,ennemi,obstacl,speed,sens))
 
-class obstacle():
+class Obstacle():
     listeobstacle=[]
     def __init__(self,root,x,y):
         self.canva=root.canvaGame
@@ -524,7 +524,7 @@ class TireE():
                         Ennemi.shotsE.remove(shot)
                 
                 canva.delete(self.shotE)
-                obstacle.listeobstacle[b//3-1].pop()
+                Obstacle.listeobstacle[b//3-1].pop()
                 
             if b==Mobs.item[0]:
                 print('joueur touché')
