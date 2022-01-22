@@ -160,7 +160,6 @@ class obstacle():
         self.root=root
         self.x=x
         self.y=y
-        #self.listeobstacle=[]
         for h in  range(3):
             for i in range(6):
                 Pileobstacle=[]
@@ -172,13 +171,13 @@ class obstacle():
                 obstacle.listeobstacle.append(Pileobstacle)
             self.x=x+(h+1)*300
             self.y=y
-class mobs():
+class Mobs():
     item=[]
     def __init__(self,root,x,y):
         self.canva=root.canvaGame
         self.x=x
         self.y=y
-        mobs.item.append(self.canva.create_image(x,y, image=self.imageEnemis))
+        Mobs.item.append(self.canva.create_image(x,y, image=self.imageEnemis))
         self.canva.pack()
         
     
@@ -260,7 +259,7 @@ class Ennemi():
         self.boss=canva.create_image(450,100, image=boss)
 
 
-class joueur(mobs):
+class joueur(Mobs):
     def vaRightRelease(self, event, canva):
         self.vaRightBool=False
     def vaRightPress(self, event, canva):
@@ -272,15 +271,15 @@ class joueur(mobs):
         self.vaLeftBool=True
 
     def vaRight(self, canva):
-        x1,y1,x2,y2=canva.bbox(mobs.item[0])
+        x1,y1,x2,y2=canva.bbox(Mobs.item[0])
         if x2+10<900:
-            canva.move(mobs.item[0],10,0)
+            canva.move(Mobs.item[0],10,0)
             self.x+=10
 
     def vaLeft(self, canva):
-        x1,y1,x2,y2=canva.bbox(mobs.item[0])
+        x1,y1,x2,y2=canva.bbox(Mobs.item[0])
         if x1-10>0:
-            canva.move(mobs.item[0],-10,0)
+            canva.move(Mobs.item[0],-10,0)
             self.x-=10
             
     def tir(self, event,canva,ennemi,scorevar):
@@ -371,7 +370,7 @@ class tireE():
                 canva.delete(self.shotE)
                 obstacle.listeobstacle[b//3-1].pop()
                 
-            if b==mobs.item[0]:
+            if b==Mobs.item[0]:
                 print('joueur touché')
                 for shot in Ennemi.shotsE:
                     if shot.shotE==self.shotE:
