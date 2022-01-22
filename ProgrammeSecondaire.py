@@ -138,7 +138,11 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
 
         #Détruit la frame de jeu
         self.frameGame.destroy()
-
+        
+        Joueur.item=[]
+        Ennemi.shotsE=[]
+        Obstacle.listeobstacle=[]
+        
         #Fonction qui lance une partie
         self.startPartie()
         arestart=True
