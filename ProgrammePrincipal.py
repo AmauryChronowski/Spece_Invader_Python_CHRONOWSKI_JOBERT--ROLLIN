@@ -27,5 +27,6 @@ if __name__ == "__main__":
     img1 = tk.PhotoImage(file="images/enemi1.gif")
     img2 = tk.PhotoImage(file="images/enemi2.gif")
     img3 = tk.PhotoImage(file="images/enemi3.gif")
-    game = SpaceInvader(root,img1,img2,img3)
+    img4 = tk.PhotoImage(file="images/Boss.gif")
+    game = SpaceInvader(root,img1,img2,img3,img4)
     game.mainloop()
