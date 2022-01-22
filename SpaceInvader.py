@@ -1,19 +1,25 @@
+# -*- coding: utf-8 -*-
+
+# Header
+
 """
-Programme principale Space Invader
+
+Programme principal du projet SpaceInvader
+
 Que fait ce programme : Réalise le lancement du Space Invader
 
-
-
-
-
 Créateurs : Amaury CHRONOWSKI / Gabin JOBERT--ROLLIN
+
 Date de réalisation: 15/11/2021 - 22/01/2022
+
+Que reste-t-il à faire :
+
 """
 
-#bibliothèques standards
+#Bibliothèques standards
 import tkinter as tk
 
-#bibliothèques personelles
+#Bibliothèques personelles
 from MetaGame import Meta
 
 
