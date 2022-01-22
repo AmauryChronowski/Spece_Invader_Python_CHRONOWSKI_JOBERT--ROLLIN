@@ -114,10 +114,10 @@ class SpaceInvader(tk.Frame):
         player=joueur(self,450,830)
         ennemi=Ennemi(self,50,300, self.img1,self.img2,self.img3)
         self.bindPlayer(player,ennemi,self.scorevar)
-        self.gameLoop(player,ennemi,obstacl,1,"d")
+        self.gameLoop(player,ennemi,1,"d")
         print(player.imageEnemis)
 
-    def gameLoop(self,player,ennemi,obstacl,speed,sens):
+    def gameLoop(self,player,ennemi,speed,sens):
         if player.shots != []:
             for shoot in player.shots:
                 self.scorevar=shoot.update(self.canvaGame,ennemi,self.scorevar)
@@ -152,7 +152,7 @@ class SpaceInvader(tk.Frame):
             if Ennemi.shotsE != []:
                 for shoot in Ennemi.shotsE:
                     shoot.updateE(self.canvaGame)
-        self.canvaGame.after(16,lambda : self.gameLoop(player,ennemi,obstacl,speed,sens))
+        self.canvaGame.after(16,lambda : self.gameLoop(player,ennemi,speed,sens))
 class obstacle():
     listeobstacle=[]
     def __init__(self,root,x,y):
