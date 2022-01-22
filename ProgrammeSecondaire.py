@@ -155,7 +155,7 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
         player=joueur(self,450,830) #Elément joeur
         ennemi=Ennemi(self,50,300, self.img1,self.img2,self.img3,self.img5,self.img6) #Différents ennemies utilisés
 
-        self.bindPlayer(player,ennemi,self.scorevar) #Fonction qui associe les touches du clavier à des actions
+        self.bindPlayer(player,ennemi,self.scoreVar) #Fonction qui associe les touches du clavier à des actions
         self.gameLoop(player,ennemi,obstacl,1,"d") #Fonction qui rafréchit en continue du jeu
 
     def gameEnd(self): #Fonction de fin de partie
@@ -176,7 +176,7 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
         self.fin.pack(side = "top")
 
         #Affichage du score final
-        self.scorefin = tk.Label(self.frameGame, text = "Votre socre est de " + str(self.scorevar), fg = "green", bg = "black", font = ("Helvetica", 50))
+        self.scorefin = tk.Label(self.frameGame, text = "Votre socre est de " + str(self.scoreVar), fg = "green", bg = "black", font = ("Helvetica", 50))
         self.scorefin.pack(side = "top")
 
         #Boutton pour quitter
@@ -194,7 +194,7 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
         obstacl=obstacle(self,75,700)
         player=joueur(self,450,830)
         ennemi=Ennemi(self,50,300, self.img1,self.img2,self.img3)
-        self.bindPlayer(player,ennemi,self.scorevar)
+        self.bindPlayer(player,ennemi,self.scoreVar)
         self.gameLoop(player,ennemi,1,"d")
         print(player.imageEnemis)
 
@@ -219,7 +219,7 @@ class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
             if Ennemi.shotsE != []:
                 for shoot in Ennemi.shotsE:
                     shoot.updateE(self.canvaGame)
-            self.scorestr.set(str(self.scoreVar))
+            self.scoreStr.set(str(self.scoreVar))
             
         elif ennemi.boss==0 and ennemi.listeEnnemies==[]:
             speed=10
@@ -399,15 +399,15 @@ class joueur(Mobs):
         super().__init__(canva,x,y)
 
 class tirShot():
-    def __init__(self,canva,person,ennemi,scorevar):
+    def __init__(self,canva,person,ennemi,scoreVar):
         self.person=person
         self.x=person.x
         self.y=person.y
         self.shot= canva.create_oval(person.x-10,person.y-20-person.imageHeight/2,person.x+10,person.y-person.imageHeight/2,fill='green')
         
-        self.update(canva,ennemi,scorevar)
+        self.update(canva,ennemi,scoreVar)
     
-    def update(self,canva,ennemi,scorevar):
+    def update(self,canva,ennemi,scoreVar):
             if self.y<=900 and self.y>=0:
                 self.y-=15
                 canva.move(self.shot,0,-15)
@@ -423,11 +423,11 @@ class tirShot():
                         for j in i:
                             if j==b:
                                 if b in [58, 61, 64, 67, 70, 73]:
-                                    scorevar+=300
+                                    scoreVar+=300
                                 elif b in [57, 60, 63, 66, 69, 72]:
-                                    scorevar+=200
+                                    scoreVar+=200
                                 elif b in [56, 59, 62, 65, 68, 71]:
-                                    scorevar+=100
+                                    scoreVar+=100
 
                                 ennemi.listeEnnemies[k].pop(u)
                                 canva.delete(b)  
@@ -459,11 +459,11 @@ class tirShot():
                     ennemi.bossvie-=1
                     canva.delete(self.shot)
                     self.person.shots.pop()
-                    scorevar+=1000
+                    scoreVar+=1000
             else:
                 canva.delete(self.shot)
                 self.person.shots.pop()
-            return scorevar
+            return scoreVar
 
 
 class tireE():
