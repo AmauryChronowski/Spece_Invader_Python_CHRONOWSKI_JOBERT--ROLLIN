@@ -1,6 +1,6 @@
 # Info générales
 Jeu Space-Invader crée en Python dans le cadre du module CS-DEV de la 3ème année d'école d'ingénieur CPE Lyon. Enseignant : Xavier TROUILLOT
-
+réalisé entre le 15/11/2021 - 22/01/2022
 # Possibles améliorations
 -Créer des patterns d'ennemis différents
 -créer des modes de difficulté différents 
