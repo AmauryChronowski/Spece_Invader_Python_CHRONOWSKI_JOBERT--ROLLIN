@@ -1,113 +1,194 @@
 # -*- coding: utf-8 -*-
-
 # Header
 
 """
+
 Programme secondaire Sapce Invader
-Amaury CHRONOWSKI/Gabin JOBERT--ROLLIN
-15/11/2021
-Réalise le lancement du Space Invader
--------
+
+Que fait ce programme : Comptient les différentes fonctions pour réaliser le Space Invader
+
+Qui l'a fait : Amaury CHRONOWSKI / Gabin JOBERT--ROLLIN
+
+Quand a-t-il été réalisé : 15/11/2021 -22/01/2022
+
+Que reste-t-il à faire :
+
 """
+
 #Importation de bibliothèques nécessaires
-from os import spawnl
 import tkinter as tk
-from time import time
-from tkinter.constants import X
 from random import random
 
+#Fonctions utilisées dans le programme principal
+class SpaceInvader(tk.Frame): #Classe de la fenêtre de jeu
+    def __init__(self,root, img1,img2,img3,img4,img5,img6): #initialisation de la fenêtre de jeu | Reçoit : les images des ennemies
 
-class SpaceInvader(tk.Frame):
-    def __init__(self,root, img1,img2,img3,img4):
         super().__init__(root)
-        self.root=root
+        self.root = root
 
+        #Variables
+
+        #Images des ennemies
         self.img1 = img1
         self.img2 = img2
         self.img3 = img3
         self.img4 = img4
-        
+        self.img5 = img5
+        self.img6 = img6
 
         # Menu
-        self.Menu = tk.Frame(bg="black")
-        
-        self.titre=tk.Label(self.Menu, text="Space Invader",font=("Helvetica",80), fg="green",bg="black")
-        self.titre.pack(side="top", expand="yes")
-        
-        self.Démarrer = tk.Button(self.Menu, text="START",font=("Helvetica",30),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.startPartie)
-        self.Démarrer.pack(side="top", expand="yes")
-        
-        self.Quitter = tk.Button(self.Menu, text="QUIT",font=("Helvetica",30),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.root.destroy)
-        self.Quitter.pack(side="top", expand="yes")
-        
-        self.Menu.pack(fill="both",expand="yes") 
 
-    def bindPlayer(self,Player,ennemi,scorevar):
+        #Frame du menu
+        self.menu = tk.Frame(bg = "black")
         
-        self.root.bind("<KeyRelease-q>",lambda event, e=self.canvaGame: Player.vaLeftRelease(event, e))
-        self.root.bind("<KeyPress-q>",lambda event, e=self.canvaGame: Player.vaLeftPress(event, e))
-        self.root.bind("<KeyRelease-d>",lambda event, e=self.canvaGame: Player.vaRightRelease(event, e))
-        self.root.bind("<KeyPress-d>",lambda event, e=self.canvaGame: Player.vaRightPress(event, e))
-        self.root.bind("<space>",lambda event, e=self.canvaGame: Player.tir(event, e,ennemi,scorevar))     
+        #Titre
+        self.titre = tk.Label(self.menu, text = "Space Invader", font = ("Helvetica", 80), fg = "green",bg = "black")
+        self.titre.pack(side = "top", expand = "yes")
+        
+        #Boutton poue lancer le jeu
+        self.bDemarrer = tk.Button(self.menu, text = "START", font = ("Helvetica", 30), fg = "green", bg = "black", activebackground = 'green', activeforeground = 'white', highlightcolor = "white", highlightthickness = 4, relief = "flat", highlightbackground = "green", command = self.startPartie)
+        self.bDemarrer.pack(side = "top", expand = "yes")
+        
+        #Boutton pour quitter
+        self.bQuitter = tk.Button(self.menu, text = "QUIT", font = ("Helvetica", 30), fg = "green", bg = "black", activebackground = 'green', activeforeground = 'white', highlightcolor = "white", highlightthickness = 4, relief = "flat", highlightbackground = "green", command = self.root.destroy)
+        self.bQuitter.pack(side = "top", expand = "yes")
+        
+        self.menu.pack(fill = "both",expand = "yes") 
+
+    def bindPlayer(self,player,ennemi,scoreVar): #Fonctions atribuant des action à des touches du clavier | Reçoit : l'objet joueur, l'objet ennemie et le score du joueur | Lance : les fonction de déplacement du personnage (qui prennent les actions de touche du clavier) et la fonction de tir du personnage (qui pend les action du clavier, l'objet ennemie et le score du joueur)
+        self.root.bind("<KeyRelease-z>", lambda event, e = self.canvaGame: player.vaUpRelease(event, e))
+        self.root.bind("<KeyPress-z>", lambda event, e = self.canvaGame: player.vaUpPress(event, e))
+        self.root.bind("<KeyRelease-s>", lambda event, e = self.canvaGame: player.vaDownRelease(event, e))
+        self.root.bind("<KeyPress-s>", lambda event, e = self.canvaGame: player.vaDownPress(event, e))
+        self.root.bind("<KeyRelease-q>", lambda event, e = self.canvaGame: player.vaLeftRelease(event, e))
+        self.root.bind("<KeyPress-q>", lambda event, e = self.canvaGame: player.vaLeftPress(event, e))
+        self.root.bind("<KeyRelease-d>", lambda event, e = self.canvaGame: player.vaRightRelease(event, e))
+        self.root.bind("<KeyPress-d>", lambda event, e = self.canvaGame: player.vaRightPress(event, e))
+        self.root.bind("<space>", lambda event, e = self.canvaGame: player.tir(event, e, ennemi, scoreVar))     
             
-    def startPartie(self):
-        self.Menu.destroy()
-        
-        #self.clockStartTime=time.time()
+    def startPartie(self): #Fonction qui lance une partie 
 
-        self.scorevar=0
-        self.scorestr=tk.StringVar()
-        self.scorestr.set(str(self.scorevar))
+        #Déstruction de la frame du menu
+        self.menu.destroy()
+        
+        #Variables
+        self.vie = 3 #Vie du personnage
+        self.scoreVar = 0 #Score
+        self.rafale = "yes" #Inofrmation pour le boss
+        self.rafaleNb = 0 #Inofrmation pour le boss
 
-        self.FrameGame= tk.Frame(bg="black")
-        
-        self.canvaGame=tk.Canvas(self.FrameGame, bg= 'black',height=900,width=900,highlightcolor="white",highlightthickness=2,relief="flat",highlightbackground="green")
-        self.canvaGame.pack(side="left")
-        
-        self.FreamHeartContain= tk.Frame(self.FrameGame,bg="black")
-        self.FreamHeartContain.pack()
+        #Initialisation de la variable permétant de modifier le score
+        self.scoreStr = tk.StringVar()  
+        self.scoreStr.set(str(self.scoreVar))
 
-        self.heartimg=tk.PhotoImage(file='images/heart.png')
-        
-        self.FreamHeart1= tk.Frame(self.FreamHeartContain,bg="black")
-        self.FreamHeart1.pack(side='left')
-        self.FreamHeart2= tk.Frame(self.FreamHeartContain,bg="black")
-        self.FreamHeart2.pack(side='left')
-        self.FreamHeart3= tk.Frame(self.FreamHeartContain,bg="black")
-        self.FreamHeart3.pack(side='right')
-        
-        self.Heart1=tk.Canvas(self.FreamHeart1,height=180,width=180,bg="black",highlightthickness=0)
-        self.Heart1.create_image(0,0,anchor='nw',image=self.heartimg)
-        self.Heart1.pack(side="left")
-        
-        self.Heart2=tk.Canvas(self.FreamHeart2,height=180,width=180,bg="black",highlightthickness=0)
-        self.Heart2.create_image(0,0,anchor='nw',image=self.heartimg)
-        self.Heart2.pack(side="top")
-        
-        self.Heart3=tk.Canvas(self.FreamHeart3,height=180,width=180,bg="black",highlightthickness=0)
-        self.Heart3.create_image(0,0,anchor='nw',image=self.heartimg)
-        self.Heart3.pack(side="right")
-        
-        
-        self.labelScore1 = tk.Label(self.FrameGame, text="Score : ", fg="green",bg="black",font=("Helvetica",50))
-        self.labelScore1.pack(anchor="w")
-        
-        self.labelScore2 = tk.Label(self.FrameGame, textvariable=self.scorestr ,font=("Helvetica",50),bg="black", fg="green")
-        self.labelScore2.pack(anchor="w")
+        #Jeu
 
-        self.RejouerB = tk.Button(self.FrameGame, text="RESTART",font=("Helvetica",50),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.Rejouer)
-        self.RejouerB.pack(anchor="s", expand="yes")
-
-        self.Quitter = tk.Button(self.FrameGame, text="QUIT",font=("Helvetica",50),fg="green",bg="black",activebackground='green',activeforeground='white',highlightcolor="white",highlightthickness=4,relief="flat",highlightbackground="green",command=self.root.destroy)
-        self.Quitter.pack(anchor="s", expand="yes")
+        #Frame du jeu
+        self.frameGame = tk.Frame(bg = "black")
         
-        self.FrameGame.pack(fill="both",expand="yes")
-
-        self.gameStart()
+        #Canvas où se déroule le jeu
+        self.canvaGame = tk.Canvas(self.frameGame, bg = 'black', height = 900, width = 900, highlightcolor = "white", highlightthickness = 2, relief = "flat", highlightbackground = "green")
+        self.canvaGame.pack(side = "left")
         
-    def Rejouer(self):
-        self.FrameGame.destroy()
+        #Frame contenant l'information de la vie du joueur
+        self.freamHeartContain = tk.Frame(self.frameGame, bg = "black")
+        self.freamHeartContain.pack()
+
+        #Image du coeur
+        self.heartimg = tk.PhotoImage(file = 'images/heart.gif')
+        
+        #Frame pour chaque coeur en prévision de leur supréssions une par une
+        self.FreamHeart1 = tk.Frame(self.freamHeartContain, bg = "black")
+        self.FreamHeart1.pack(side = 'left')
+
+        self.FreamHeart2 = tk.Frame(self.freamHeartContain, bg = "black")
+        self.FreamHeart2.pack(side = 'left')
+
+        self.FreamHeart3 = tk.Frame(self.freamHeartContain, bg = "black")
+        self.FreamHeart3.pack(side = 'right')
+        
+        #Inssertion des image du coeur dans les frames
+        self.Heart1 = tk.Canvas(self.FreamHeart1, height = 180, width = 180, bg = "black", highlightthickness = 0)
+        self.Heart1.create_image(0, 0, anchor = 'nw', image = self.heartimg)
+        self.Heart1.pack(side = "left")
+        
+        self.Heart2 = tk.Canvas(self.FreamHeart2, height = 180, width = 180, bg = "black", highlightthickness = 0)
+        self.Heart2.create_image(0, 0, anchor = 'nw', image = self.heartimg)
+        self.Heart2.pack(side = "top")
+        
+        self.Heart3 = tk.Canvas(self.FreamHeart3, height = 180, width = 180, bg = "black", highlightthickness = 0)
+        self.Heart3.create_image(0, 0, anchor = 'nw', image = self.heartimg)
+        self.Heart3.pack(side = "right")
+        
+        #Affichage du score
+        self.labelScore1 = tk.Label(self.frameGame, text = "Score : ", fg = "green", bg = "black", font = ("Helvetica", 50))
+        self.labelScore1.pack(anchor = "w")
+        
+        self.labelScore2 = tk.Label(self.frameGame, textvariable = self.scoreStr, font = ("Helvetica", 50), bg = "black", fg = "green")
+        self.labelScore2.pack(anchor = "w")
+
+        #Boutton rejouer
+        self.bRejouer = tk.Button(self.frameGame, text = "RESTART", font = ("Helvetica", 50), fg = "green", bg = "black", activebackground = 'green', activeforeground = 'white', highlightcolor = "white", highlightthickness = 4, relief = "flat", highlightbackground = "green", command = self.rejouer)
+        self.bRejouer.pack(anchor = "s", expand = "yes")
+
+        #Boutton pour quitter
+        self.bQuitter = tk.Button(self.frameGame, text = "QUIT", font = ("Helvetica",50), fg = "green", bg = "black", activebackground = 'green', activeforeground = 'white', highlightcolor = "white", highlightthickness = 4, relief = "flat", highlightbackground = "green", command = self.root.destroy)
+        self.bQuitter.pack(anchor = "s", expand = "yes")
+        
+        self.frameGame.pack(fill = "both", expand = "yes")
+
+        #Fonction qui enclanche la partie
+        self.gameStart() 
+        
+    def rejouer(self): #Fonction pour rejouer une partie
+
+        #Détruit la frame de jeu
+        self.frameGame.destroy()
+
+        #Fonction qui lance une partie
         self.startPartie()
+
+    def gameStart(self): #Fonction qui enclanche la partie | Lance : Fonction qui associe les touches du clavier à des actions et la fonction qui rafréchit en continue du jeu
+        
+        #Objet utilisés dans les fonctions
+        obstacl=obstacle(self,75,700) #Obstacles protégant le joueur
+        player=joueur(self,450,830) #Elément joeur
+        ennemi=Ennemi(self,50,300, self.img1,self.img2,self.img3,self.img5,self.img6) #Différents ennemies utilisés
+
+        self.bindPlayer(player,ennemi,self.scorevar) #Fonction qui associe les touches du clavier à des actions
+        self.gameLoop(player,ennemi,obstacl,1,"d") #Fonction qui rafréchit en continue du jeu
+
+    def gameEnd(self): #Fonction de fin de partie
+
+        #Déstruction de la frame de jeu 
+        self.frameGame.destroy()
+
+        #Création de la frame de fin de partie
+        self.frameGame = tk.Frame(bg="black")
+
+        #Différentiation entre la victoire et la défaite
+        if self.vie != 0:
+            self.fin = tk.Label(self.frameGame, text = "Vous avez gagné", fg = "green", bg = "black", font = ("Helvetica", 50))
+
+        if self.vie == 0:
+            self.fin = tk.Label(self.frameGame, text = "Vous avez perdu", fg = "green", bg = "black", font = ("Helvetica", 50))
+
+        self.fin.pack(side = "top")
+
+        #Affichage du score final
+        self.scorefin = tk.Label(self.frameGame, text = "Votre socre est de " + str(self.scorevar), fg = "green", bg = "black", font = ("Helvetica", 50))
+        self.scorefin.pack(side = "top")
+
+        #Boutton pour quitter
+        self.bQuitter = tk.Button(self.frameGame, text = "QUIT", font = ("Helvetica",50), fg = "green", bg = "black", activebackground = 'green', activeforeground = 'white', highlightcolor = "white", highlightthickness = 4, relief = "flat", highlightbackground = "green", command = self.root.destroy)
+        self.bQuitter.pack(anchor = "s", expand = "yes")
+
+        #Boutton rejouer
+        self.bRejouer = tk.Button(self.frameGame, text = "RESTART", font = ("Helvetica", 50), fg = "green", bg = "black", activebackground = 'green', activeforeground = 'white', highlightcolor = "white", highlightthickness = 4, relief = "flat", highlightbackground = "green", command = self.rejouer)
+        self.bRejouer.pack(anchor = "s", expand = "yes")
+
+        self.frameGame.pack(fill = "both", expand = "yes")
+
 
     def gameStart(self):
         obstacl=obstacle(self,75,700)
@@ -140,19 +221,23 @@ class SpaceInvader(tk.Frame):
                     shoot.updateE(self.canvaGame)
             self.scorestr.set(str(self.scorevar))
             
-
         elif ennemi.boss==0 and ennemi.listeEnnemies==[]:
+            speed=10
             ennemi.Boss(self.img4,self.canvaGame)
-            if Ennemi.shotsE != []:
-                for shoot in Ennemi.shotsE:
+            if ennemi.shotsE != []:
+                for shoot in ennemi.shotsE:
                     shoot.updateE(self.canvaGame)
-            
+                    
+        elif ennemi.bossvie==0:
+            self.gameEnd()
             
         else:
             if Ennemi.shotsE != []:
                 for shoot in Ennemi.shotsE:
                     shoot.updateE(self.canvaGame)
+                    
         self.canvaGame.after(16,lambda : self.gameLoop(player,ennemi,obstacl,speed,sens))
+        
 class obstacle():
     listeobstacle=[]
     def __init__(self,root,x,y):
@@ -160,7 +245,6 @@ class obstacle():
         self.root=root
         self.x=x
         self.y=y
-        #self.listeobstacle=[]
         for h in  range(3):
             for i in range(6):
                 Pileobstacle=[]
@@ -172,6 +256,7 @@ class obstacle():
                 obstacle.listeobstacle.append(Pileobstacle)
             self.x=x+(h+1)*300
             self.y=y
+            
 class mobs():
     item=[]
     def __init__(self,root,x,y):
@@ -188,7 +273,6 @@ class Ennemi():
     def __init__(self,root,x,y,img1,img2,img3):
         self.boss=0
         self.canva=root.canvaGame
-        #self.shotsE=[]
         self.root=root
         self.x=x
         self.y=y
@@ -258,6 +342,25 @@ class Ennemi():
     
     def Boss (self, boss, canva):
         self.boss=canva.create_image(450,100, image=boss)
+        
+    def BossMouv(self,canva,speed,sens):
+        x1,y1,x2,y2=canva.bbox(self.boss)
+
+        if x2+speed>=900 and sens=="d":
+            sens="g"
+            return sens,speed
+
+        if x1-speed<=0 and sens=="g":
+            sens="d"
+            return sens,speed
+
+        if x2+speed<900 and sens=="d":
+            canva.move(self.boss,speed,0)
+        elif x1-speed>0 and sens=="g":
+            canva.move(self.boss,-speed,0)
+
+        return sens,speed
+
 
 
 class joueur(mobs):
@@ -283,16 +386,15 @@ class joueur(mobs):
             canva.move(mobs.item[0],-10,0)
             self.x-=10
             
-    def tir(self, event,canva,ennemi,scorevar):
+    def tir(self, event,canva,ennemi,scoreVar):
         if self.shots ==[]:
-            self.shots.append(tirShot(canva,self,ennemi,scorevar))   
+            self.shots.append(tirShot(canva,self,ennemi,scoreVar))   
         
     def __init__(self, canva, x, y):
         self.vaRightBool=False
         self.vaLeftBool=False
 
         self.imageEnemis = tk.PhotoImage(file="images/joueur.gif")
-        print(self.imageEnemis)
         self.imageHeight=84
         self.imageWidth=110
         self.shots=[]
@@ -336,6 +438,31 @@ class tirShot():
                                 u+=1
                         k+=1
 
+                 elif b==ennemi.boss and ennemi.bossvie==3:
+                    ennemi.bossvie-=1
+                    canva.delete(self.shot)
+                    self.person.shots.pop()
+                    x1,y1,x2,y2=canva.bbox(ennemi.boss)
+                    x=x1+(x2-x1)
+                    y=y1+(y2-y1)
+                    canva.delete(ennemi.boss)
+                    ennemi.boss=canva.create_image(x,100, image=ennemi.imgboss1)
+
+                elif b==ennemi.boss and ennemi.bossvie==2:
+                    ennemi.bossvie-=1
+                    canva.delete(self.shot)
+                    self.person.shots.pop()
+                    x1,y1,x2,y2=canva.bbox(ennemi.boss)
+                    x=(x2+x1)/2
+                    y=(y2+y1)/2
+                    canva.delete(ennemi.boss)
+                    ennemi.boss=canva.create_image(x,100, image=ennemi.imgboss2)
+
+                elif b==ennemi.boss and ennemi.bossvie==1:
+                    ennemi.bossvie-=1
+                    canva.delete(self.shot)
+                    self.person.shots.pop()
+                    scorevar+=1000
             else:
                 canva.delete(self.shot)
                 self.person.shots.pop()
