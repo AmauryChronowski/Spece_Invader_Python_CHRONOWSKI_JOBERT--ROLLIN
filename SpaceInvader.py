@@ -23,6 +23,7 @@ import tkinter as tk
 from MetaGame import Meta
 
 
+
 if __name__ == "__main__":
 
     #Création de la fenêtre
@@ -31,12 +32,12 @@ if __name__ == "__main__":
     root.geometry('1600x900')
     
     #Récupération des images nécessaire au jeu
-    img1 = tk.PhotoImage(file="images/enemi1.gif")
-    img2 = tk.PhotoImage(file="images/enemi2.gif")
-    img3 = tk.PhotoImage(file="images/enemi3.gif")
-    img4 = tk.PhotoImage(file="images/Boss.png")
-    img5 = tk.PhotoImage(file="images/Boss1.png")
-    img6 = tk.PhotoImage(file="images/Boss2.png")
+    img1 = tk.PhotoImage(file = "images/enemi1.gif")
+    img2 = tk.PhotoImage(file = "images/enemi2.gif")
+    img3 = tk.PhotoImage(file = "images/enemi3.gif")
+    img4 = tk.PhotoImage(file = "images/Boss.png")
+    img5 = tk.PhotoImage(file = "images/Boss1.png")
+    img6 = tk.PhotoImage(file = "images/Boss2.png")
     
-    game = Meta(root,img1,img2,img3,img4,img5,img6) #Intancie la fenêtre de jeu | Entrées : les images des diffrentens ennemies, la fenêtre | Sorties : le jeu
+    game = Meta(root, img1, img2, img3, img4, img5, img6) #Intancie la fenêtre de jeu | Entrées : les images des diffrentens ennemies, la fenêtre | Sorties : le jeu
     game.mainloop() #Lance le jeu
