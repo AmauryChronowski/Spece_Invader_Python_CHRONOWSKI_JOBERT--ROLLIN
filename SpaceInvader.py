@@ -35,9 +35,9 @@ if __name__ == "__main__":
     img1 = tk.PhotoImage(file = "images/enemi1.gif")
     img2 = tk.PhotoImage(file = "images/enemi2.gif")
     img3 = tk.PhotoImage(file = "images/enemi3.gif")
-    img4 = tk.PhotoImage(file = "images/Boss.png")
-    img5 = tk.PhotoImage(file = "images/Boss1.png")
-    img6 = tk.PhotoImage(file = "images/Boss2.png")
+    img4 = tk.PhotoImage(file = "images/Boss.gif")
+    img5 = tk.PhotoImage(file = "images/Boss1.gif")
+    img6 = tk.PhotoImage(file = "images/Boss2.gif")
     
     game = Meta(root, img1, img2, img3, img4, img5, img6) #Intancie la fenêtre de jeu | Entrées : les images des diffrentens ennemies, la fenêtre | Sorties : le jeu
     game.mainloop() #Lance le jeu
