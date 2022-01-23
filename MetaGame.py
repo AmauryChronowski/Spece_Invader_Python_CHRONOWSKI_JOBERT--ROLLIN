@@ -29,10 +29,11 @@ import ClasseProjectiles as CP
 import GameElements as GE
 
 
+
 class Meta(tk.Frame): 
 #Classe de la fenêtre de jeu
 
-    def __init__(self,root, img1,img2,img3,img4,img5,img6):
+    def __init__(self, root, img1, img2, img3, img4, img5, img6):
     #initialisation de la fenêtre de jeu | Reçoit : les images des ennemies
 
         #Fenêtre
@@ -66,6 +67,7 @@ class Meta(tk.Frame):
         
         self.menu.pack(fill = "both",expand = "yes") 
 
+
     def bindPlayer(self,player,ennemi,scoreVar):
     #Fonctions atribuant des action à des touches du clavier | Reçoit : l'objet joueur, l'objet ennemie et le score du joueur | Lance : les fonction de déplacement du personnage (qui prennent les actions de touche du clavier) et la fonction de tir du personnage (qui pend les action du clavier, l'objet ennemie et le score du joueur)
         
@@ -78,7 +80,8 @@ class Meta(tk.Frame):
         self.root.bind("<KeyRelease-d>", lambda event, e = self.canvaGame: player.vaRightRelease(event, e))
         self.root.bind("<KeyPress-d>", lambda event, e = self.canvaGame: player.vaRightPress(event, e))
         self.root.bind("<space>", lambda event, e = self.canvaGame: player.tir(event, e, ennemi, scoreVar))     
-            
+
+
     def startPartie(self):
     #Fonction qui lance une partie 
 
@@ -94,7 +97,6 @@ class Meta(tk.Frame):
         #Initialisation de la variable permétant de modifier le score
         self.scoreStr = tk.StringVar()  
         self.scoreStr.set(str(self.scoreVar))
-        print(GE.Ennemi.shotsE)
 
         #------Jeu------
 
@@ -154,31 +156,33 @@ class Meta(tk.Frame):
 
         #Fonction qui enclanche la partie
         self.gameStart() 
-        
+
+
     def rejouer(self):
     #Fonction pour rejouer une partie
 
         #Détruit la frame de jeu
         self.frameGame.destroy()
         
-        #Remet les tableaux à zéro
-        GE.Joueur.theJoueur=[]
-        GE.Ennemi.shotsE=[]
-        GE.Obstacle.listeobstacle=[]
+        #Remet à zéro les tableaux
+        GE.Joueur.theJoueur = []
+        GE.Ennemi.shotsE = []
+        GE.Obstacle.listeObstacle = []
         
         #Fonction qui lance une partie
         self.startPartie()
+
 
     def gameStart(self):
     #Fonction qui enclanche la partie | Lance : Fonction qui associe les touches du clavier à des actions et la fonction qui rafréchit en continue du jeu
         
         #Objet utilisés dans les fonctions
-        obstacl=GE.Obstacle(self,75,700) #Obstacles protégant le joueur
-        player=GE.Joueur(self,450,830) #Elément joeur
-        ennemi=GE.Ennemi(self,50,300, self.img1,self.img2,self.img3,self.img5,self.img6) #Différents ennemies utilisés
+        obstacl = GE.Obstacle(self, 75, 700) #Obstacles protégant le joueur
+        player = GE.Joueur(self, 450, 830) #Elément joeur
+        ennemi = GE.Ennemi(self, 50, 300, self.img1, self.img2, self.img3, self.img5, self.img6) #Différents ennemies utilisés
 
-        self.bindPlayer(player,ennemi,self.scoreVar) #Fonction qui associe les touches du clavier à des actions
-        self.gameLoop(player,ennemi,obstacl,1,"d") #Fonction qui rafréchit en continue le jeu
+        self.bindPlayer(player, ennemi, self.scoreVar) #Fonction qui associe les touches du clavier à des actions
+        self.gameLoop(player, ennemi, obstacl, 1, "d") #Fonction qui rafréchit en continue le jeu
 
 
     def gameEnd(self):
@@ -188,7 +192,7 @@ class Meta(tk.Frame):
         self.frameGame.destroy()
 
         #Création de la frame de fin de partie
-        self.frameGame = tk.Frame(bg="black")
+        self.frameGame = tk.Frame(bg = "black")
 
         #Différentiation entre la victoire et la défaite
         if self.vie != 0:
@@ -214,72 +218,83 @@ class Meta(tk.Frame):
         self.frameGame.pack(fill = "both", expand = "yes")
 
 
-    def gameLoop(self,player,ennemi,obstacl,speed,sens): 
+    def gameLoop(self, player, ennemi, obstacl, speed, sens): 
     #Fonction réappelée toutes les 16ms (role de la boucle infinie) | Lance : Fonctions qui réalaise des évènements si les conditions sont remplie et actualise des objets | Entrée : objet joueur, objet ennemie, objet obstacle, vitesse de déplacement des ennemies, sens de déplacement des ennemies
         
-        if player.shots != []:  #Actualise le tir du joueur
+        if player.shots != []: #Actualise le tir du joueur
             for shoot in player.shots:
-                self.scoreVar=shoot.update(self.canvaGame,ennemi,self.scoreVar)
+                self.scoreVar=shoot.update(self.canvaGame, ennemi, self.scoreVar)
 
-        if player.vaRightBool ==True:   #Déplace le joueur 
+        if player.vaRightBool == True: #Déplace le joueur 
             player.vaRight(self.canvaGame)
-        if player.vaLeftBool ==True:
+        if player.vaLeftBool == True:
             player.vaLeft(self.canvaGame)
 
-        for i in ennemi.listeEnnemies:  #Si une colonne d'énnemi est entièrement morte accélère la descente
-            if i==[]:
-                ennemi.listeEnnemies.pop( ennemi.listeEnnemies.index(i))
-                speed+=0.5
+        for fileE in ennemi.listeEnnemies:  #Si une colonne d'énnemi est entièrement morte accélère la descente
+            if fileE == []:
+                ennemi.listeEnnemies.pop(ennemi.listeEnnemies.index(fileE))
+                speed += 0.5
 
-        if  ennemi.listeEnnemies!=[]: #Réalise toutes les actions sur le groupe d'ennemies
-            sens,speed=ennemi.move(self.canvaGame,speed,sens) #Bouge le groupe d'ennemies
+        #Détecte si un ennemies rentre en contacte avec le joueur et perd la partie
+        x1, y1, x2, y2 = self.canvaGame.bbox(GE.Joueur.theJoueur[0])
+        objOVer = self.canvaGame.find_overlapping(x1, y1, x2, y2)
+        for fileE in ennemi.listeEnnemies:
+            for ennemiU in fileE:
+                for obj in objOVer:
+                    if obj == ennemiU:
+                        self.vie = 0
+                        self.gameEnd()
+
+
+        if  ennemi.listeEnnemies != []: #Réalise toutes les actions sur le groupe d'ennemies
+            sens, speed = ennemi.move(self.canvaGame, speed, sens) #Bouge le groupe d'ennemies
             ennemi.tire(self.canvaGame) #Fait tirer les ennemies
 
             if GE.Ennemi.shotsE != []: #Actualise les tirs des énnemis
                 for shoot in GE.Ennemi.shotsE:
-                    self.vie=shoot.updateE(self.canvaGame,self.vie,self.freamHeart1,self.freamHeart2,self.freamHeart3) 
+                    self.vie = shoot.updateE(self.canvaGame, self.vie, self.freamHeart1, self.freamHeart2, self.freamHeart3) 
 
             self.scoreStr.set(str(self.scoreVar)) #Rafréchie le score
 
-        elif ennemi.boss==0 and ennemi.listeEnnemies==[]:   #Fait apparaitre le boss si les énnemis sont morts
-            speed=10
-            ennemi.Boss(self.img4,self.canvaGame)
+        elif ennemi.boss == 0 and ennemi.listeEnnemies == []:   #Fait apparaitre le boss si les énnemis sont morts
+            speed = 10
+            ennemi.Boss(self.img4, self.canvaGame)
 
             if GE.Ennemi.shotsE != []: #Actualise les tirs des énnemis
                 for shoot in GE.Ennemi.shotsE:
-                    self.vie=shoot.updateE(self.canvaGame,self.vie,self.freamHeart1,self.freamHeart2,self.freamHeart3)
+                    self.vie = shoot.updateE(self.canvaGame, self.vie, self.freamHeart1, self.freamHeart2, self.freamHeart3)
  
         else:  #Gère la phase de jeu contre le boss
             if GE.Ennemi.shotsE != []:
                 for shoot in GE.Ennemi.shotsE: #Actualise les tirs des énnemis
-                    self.vie=shoot.updateE(self.canvaGame,self.vie,self.freamHeart1,self.freamHeart2,self.freamHeart3)
-            sens,speed=ennemi.BossMouv(self.canvaGame,speed,sens) #Bouge le boss
+                    self.vie = shoot.updateE(self.canvaGame, self.vie, self.freamHeart1, self.freamHeart2, self.freamHeart3)
+            sens, speed = ennemi.BossMouv(self.canvaGame, speed, sens) #Bouge le boss
 
             #Gère la rafale de tir du boss
-            if self.rafaleNb<=40 and self.rafale=="yes": #Fait tiré 40 projectiles en continue
-                self.rafaleNb+=1              
-                GE.Ennemi.shotsE.append(CP.TirEnnemi(self.canvaGame,ennemi.boss))
+            if self.rafaleNb <= 40 and self.rafale == "yes": #Fait tiré 40 projectiles en continue
+                self.rafaleNb += 1              
+                GE.Ennemi.shotsE.append(CP.TirEnnemi(self.canvaGame, ennemi.boss))
 
-            elif self.rafaleNb>40 and self.rafale=="yes": #Change le mode 
-                self.rafale="no"
-                self.rafaleNb=0
+            elif self.rafaleNb > 40 and self.rafale == "yes": #Change le mode 
+                self.rafale = "no"
+                self.rafaleNb = 0
 
-            elif self.rafaleNb<=40 and self.rafale=="no": #Fait attendre avant de tirer
-                self.rafaleNb+=1
+            elif self.rafaleNb <= 40 and self.rafale == "no": #Fait attendre avant de tirer
+                self.rafaleNb += 1
 
-            elif self.rafaleNb>40 and self.rafale=="no": #Change le mode 
-                self.rafale="yes"
-                self.rafaleNb=0
+            elif self.rafaleNb > 40 and self.rafale == "no": #Change le mode 
+                self.rafale = "yes"
+                self.rafaleNb = 0
 
             if GE.Ennemi.shotsE != []: #Actualise les tirs des énnemis
                 for shoot in GE.Ennemi.shotsE:
-                    self.vie=shoot.updateE(self.canvaGame,self.vie,self.freamHeart1,self.freamHeart2,self.freamHeart3)
+                    self.vie = shoot.updateE(self.canvaGame, self.vie, self.freamHeart1, self.freamHeart2, self.freamHeart3)
 
         #Gère la fin de jeu
-        if ennemi.bossvie==0: #Quand le boss n'a plus de vie (gagner)
+        if ennemi.bossVie == 0: #Quand le boss n'a plus de vie (gagner)
             self.gameEnd()
-        elif self.vie==0: #Quand le joueur n'as plus de vie (perdu)
+        elif self.vie == 0: #Quand le joueur n'as plus de vie (perdu)
             self.gameEnd()
 
-        if ennemi.bossvie!=0 and self.vie!=0 : #Rafréchie le jeu si le joueur est encore en vie et si le boss n'est pas mort
-            self.canvaGame.after(16,lambda : self.gameLoop(player,ennemi,obstacl,speed,sens))
+        if ennemi.bossVie != 0 and self.vie != 0 : #Rafréchie le jeu si le joueur est encore en vie et si le boss n'est pas mort
+            self.canvaGame.after(16, lambda : self.gameLoop(player, ennemi, obstacl, speed, sens))
